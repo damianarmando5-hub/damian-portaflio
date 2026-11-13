@@ -327,12 +327,12 @@ img { max-width: 100%; }
 
 /* ---------- v9: fondo de obra desvanecido y acabado moderno ---------- */
 html { scroll-behavior: smooth; scroll-padding-top: 76px; }
-.fondo-obra { position: fixed; inset: 0; z-index: -1; pointer-events: none; background: url("img/fondo-obra.webp") center 65% / cover no-repeat; opacity: .17; filter: grayscale(.35) contrast(.95);
+.fondo-obra { position: fixed; inset: 0; z-index: -1; pointer-events: none; background: url("img/fondo-obra-g.webp") center 65% / cover no-repeat; opacity: .17; filter: grayscale(.35) contrast(.95);
   -webkit-mask-image: radial-gradient(120% 90% at 50% 70%, #000 30%, transparent 85%); mask-image: radial-gradient(120% 90% at 50% 70%, #000 30%, transparent 85%); }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .fondo-obra { opacity: .2; filter: grayscale(.5) brightness(.8); } }
 :root[data-theme="dark"] .fondo-obra { opacity: .2; filter: grayscale(.5) brightness(.8); }
 .portada { isolation: isolate; }
-.portada-obra { position: absolute; inset: 0; z-index: -1; pointer-events: none; background: url("img/fondo-obra.webp") center 60% / cover no-repeat; opacity: .28; mix-blend-mode: luminosity;
+.portada-obra { position: absolute; inset: 0; z-index: -1; pointer-events: none; background: url("img/fondo-obra-g.webp") center 60% / cover no-repeat; opacity: .28; mix-blend-mode: luminosity;
   -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 35%, #000 70%, transparent 100%); mask-image: linear-gradient(180deg, transparent 0%, #000 35%, #000 70%, transparent 100%); }
 /* barra superior de vidrio: aparece al dejar atrás la banda del logo */
 .barra-top { position: fixed; top: 12px; left: 50%; z-index: 45; transform: translate(-50%, -140%); width: min(1180px, calc(100% - 32px)); display: flex; align-items: center; gap: 18px;
@@ -526,6 +526,40 @@ img.captura { filter: grayscale(1) contrast(1.05) !important; transition: filter
   .musica.espera { animation: llama 1.8s ease-in-out infinite; }
   @keyframes llama { 50% { box-shadow: 0 0 0 8px rgb(255 255 255 / .08); } }
 }
+
+/* ---------- v14: rendimiento ---------- */
+/* capas fijas sin filtros ni mezclas en vivo, sin animaciones de pantalla completa */
+.fondo-obra, .portada-obra { filter: none !important; animation: none !important; }
+.fondo-obra { transform: translateZ(0); }
+.portada-obra { mix-blend-mode: normal !important; opacity: .22 !important; }
+.aurora { animation: none !important; }
+.grano { animation: none !important; mix-blend-mode: normal !important; opacity: .035 !important; inset: 0 !important; }
+/* el vidrio esmerilado solo en la barra y el botón de música */
+.ficha, .tarjeta, .paso .datos span, .mini, .chip-flota, .ventana[data-vista] .flechas button, .ventana[data-vista] .contador, .dl-l figcaption { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+.tarjeta { background: #0e0e0e !important; } .ficha { background: #0c0c0c !important; } .chip-flota { background: #111 !important; }
+.ventana[data-vista] .flechas button, .ventana[data-vista] .contador { background: rgb(0 0 0 / .72) !important; }
+/* animaciones infinitas que repintaban: fuera */
+h2 em .wi, h2 .acento .wi { animation: none !important; background-position: 30% 0; }
+.portada h1 em .pal { animation: palabra .9s cubic-bezier(.2, .8, .2, 1) calc(.15s + var(--i) * .09s) forwards !important; }
+.paso .num { animation: none !important; }
+.musica.espera { animation: none !important; }
+.musica.espera::after { content: ""; position: absolute; inset: -1px; border-radius: inherit; border: 1px solid rgb(255 255 255 / .5); pointer-events: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .musica.espera::after { animation: llamaAro 1.8s ease-out infinite; }
+  @keyframes llamaAro { from { transform: scale(1); opacity: .8; } to { transform: scale(1.35, 1.6); opacity: 0; } }
+  @supports (animation-timeline: view()) {
+    .datos span, .dl-formatos span, .dl-cifras div { animation-name: subeLigero !important; }
+    @keyframes subeLigero { from { opacity: 0; translate: 0 24px; } to { opacity: 1; translate: 0 0; } }
+    .paso .num { animation: giraNum linear both !important; animation-timeline: view() !important; animation-range: entry 0% cover 40% !important; }
+  }
+  .portada h1 .pal { filter: none !important; }
+  @keyframes palabra { from { opacity: 0; transform: translateY(.5em) rotate(2deg); } to { opacity: 1; transform: none; } }
+}
+.musica { position: fixed; }
+/* las secciones fuera de pantalla no se dibujan hasta acercarse */
+#caso, #laminas, #renders, #damian-laminas, #modulos, #reglas { content-visibility: auto; contain-intrinsic-size: auto 1400px; }
+.franja-pista, .anillo, .inclina { will-change: transform; }
+.rv img, .dl-l img, .ventana img, .hoja img { will-change: auto; }
 </style>
 </head>
 <body>
@@ -677,7 +711,7 @@ img.captura { filter: grayscale(1) contrast(1.05) !important; transition: filter
       <div><span class="dl-marca"><i></i>DAMIAN 3D Studio</span><h2>Renders de la Casa Las Lomas</h2></div>
       <p>Nueve tomas del mismo modelo, de día, al atardecer y de noche, hechas en 3D Studio a 1920 × 1080. Los árboles, el auto y los muebles son modelos reales de la biblioteca 3D. Con estos renders se armaron las láminas de abajo.</p>
     </div>
-    <div class="rvs-red"><figure class="rv aparece"><img src="img/rv-02.webp" alt="Vista 3/4 desde la derecha con el sol bajo detrás del árbol; terraza de la planta alta y cochera." data-titulo="3D Studio · Esquina al atardecer" loading="lazy"><figcaption>Esquina al atardecer<span>Atardecer</span></figcaption></figure><figure class="rv aparece"><img src="img/rv-01.webp" alt="Vista 3/4 desde la esquina izquierda: volumen alto con celosía de madera, jardín frontal y cochera." data-titulo="3D Studio · Fachada principal" loading="lazy"><figcaption>Fachada principal<span>Atardecer</span></figcaption></figure><figure class="rv aparece"><img src="img/rv-04.webp" alt="Detalle del acceso: puerta pivotante, celosía de madera, piedra y jardinera." data-titulo="3D Studio · Acceso y celosía" loading="lazy"><figcaption>Acceso y celosía<span>Atardecer</span></figcaption></figure><figure class="rv aparece"><img src="img/rv-11.webp" alt="Vista 3/4 izquierda con luz de mediodía." data-titulo="3D Studio · Fachada de día" loading="lazy"><figcaption>Fachada de día<span>Día</span></figcaption></figure><figure class="rv aparece"><img src="img/rv-10.webp" alt="Vista 3/4 derecha con luz de mediodía." data-titulo="3D Studio · Esquina de día" loading="lazy"><figcaption>Esquina de día<span>Día</span></figcaption></figure><figure class="rv aparece"><img src="img/rv-07.webp" alt="Interior de la planta baja mirando hacia la celosía del frente." data-titulo="3D Studio · Sala hacia la celosía" loading="lazy"><figcaption>Sala hacia la celosía<span>Atardecer</span></figcaption></figure><figure class="rv aparece"><img src="img/rv-08.webp" alt="Frente con las ventanas encendidas y la celosía iluminada desde dentro." data-titulo="3D Studio · Fachada de noche" loading="lazy"><figcaption>Fachada de noche<span>Noche</span></figcaption></figure><figure class="rv aparece"><img src="img/rv-06.webp" alt="Vista elevada del patio trasero con pérgola, terraza y árboles." data-titulo="3D Studio · Jardín posterior" loading="lazy"><figcaption>Jardín posterior<span>Atardecer</span></figcaption></figure><figure class="rv aparece"><img src="img/rv-12.webp" alt="Vista aérea 3/4 del lote con jardín, cochera y calle." data-titulo="3D Studio · Vista aérea" loading="lazy"><figcaption>Vista aérea<span>Día</span></figcaption></figure></div>
+    <div class="rvs-red"><figure class="rv aparece"><img src="img/rv-02.webp" alt="Vista 3/4 desde la derecha con el sol bajo detrás del árbol; terraza de la planta alta y cochera." data-titulo="3D Studio · Esquina al atardecer" loading="lazy" decoding="async"><figcaption>Esquina al atardecer<span>Atardecer</span></figcaption></figure><figure class="rv aparece"><img src="img/rv-01.webp" alt="Vista 3/4 desde la esquina izquierda: volumen alto con celosía de madera, jardín frontal y cochera." data-titulo="3D Studio · Fachada principal" loading="lazy" decoding="async"><figcaption>Fachada principal<span>Atardecer</span></figcaption></figure><figure class="rv aparece"><img src="img/rv-04.webp" alt="Detalle del acceso: puerta pivotante, celosía de madera, piedra y jardinera." data-titulo="3D Studio · Acceso y celosía" loading="lazy" decoding="async"><figcaption>Acceso y celosía<span>Atardecer</span></figcaption></figure><figure class="rv aparece"><img src="img/rv-11.webp" alt="Vista 3/4 izquierda con luz de mediodía." data-titulo="3D Studio · Fachada de día" loading="lazy" decoding="async"><figcaption>Fachada de día<span>Día</span></figcaption></figure><figure class="rv aparece"><img src="img/rv-10.webp" alt="Vista 3/4 derecha con luz de mediodía." data-titulo="3D Studio · Esquina de día" loading="lazy" decoding="async"><figcaption>Esquina de día<span>Día</span></figcaption></figure><figure class="rv aparece"><img src="img/rv-07.webp" alt="Interior de la planta baja mirando hacia la celosía del frente." data-titulo="3D Studio · Sala hacia la celosía" loading="lazy" decoding="async"><figcaption>Sala hacia la celosía<span>Atardecer</span></figcaption></figure><figure class="rv aparece"><img src="img/rv-08.webp" alt="Frente con las ventanas encendidas y la celosía iluminada desde dentro." data-titulo="3D Studio · Fachada de noche" loading="lazy" decoding="async"><figcaption>Fachada de noche<span>Noche</span></figcaption></figure><figure class="rv aparece"><img src="img/rv-06.webp" alt="Vista elevada del patio trasero con pérgola, terraza y árboles." data-titulo="3D Studio · Jardín posterior" loading="lazy" decoding="async"><figcaption>Jardín posterior<span>Atardecer</span></figcaption></figure><figure class="rv aparece"><img src="img/rv-12.webp" alt="Vista aérea 3/4 del lote con jardín, cochera y calle." data-titulo="3D Studio · Vista aérea" loading="lazy" decoding="async"><figcaption>Vista aérea<span>Día</span></figcaption></figure></div>
     <p class="rvs-nota">Renders sin retoque, tal como salen de 3D Studio.</p>
   </div>
 </section>
@@ -695,8 +729,8 @@ img.captura { filter: grayscale(1) contrast(1.05) !important; transition: filter
       <div><b>A1 · A0</b><span>y 90 × 60, roll-up, banner, mampara y muro de stand</span></div>
     </div>
     <div class="dl-muro">
-      <div class="dl-fila"><figure class="dl-l aparece" style="--ar:1.5"><img src="img/lam-ia0.webp" alt="Lámina de concurso horizontal con la casa al atardecer, planta y volúmenes" data-titulo="DAMIAN Láminas · Lámina de concurso · Concurso negro" loading="lazy"><figcaption>Lámina de concurso · Concurso negro</figcaption></figure><figure class="dl-l aparece" style="--ar:.6667"><img src="img/lam-ia1.webp" alt="Póster vertical con la fachada de la casa" data-titulo="DAMIAN Láminas · Póster · Brutalista concreto" loading="lazy"><figcaption>Póster · Brutalista concreto</figcaption></figure><figure class="dl-l aparece" style="--ar:.6667"><img src="img/lam-ia2.webp" alt="Lámina cinematográfica vertical con renders de día y de noche" data-titulo="DAMIAN Láminas · Cinematográfica · Lujo dorado" loading="lazy"><figcaption>Cinematográfica · Lujo dorado</figcaption></figure></div>
-      <div class="dl-fila"><figure class="dl-l aparece" style="--ar:1.5"><img src="img/lam-ia3.webp" alt="Mosaico de fotos con renders y datos del proyecto" data-titulo="DAMIAN Láminas · Mosaico de fotos · Editorial" loading="lazy"><figcaption>Mosaico de fotos · Editorial</figcaption></figure><figure class="dl-l aparece" style="--ar:1.4144"><img src="img/lam-ia5.webp" alt="Página de portafolio con vista principal, detalle e interior" data-titulo="DAMIAN Láminas · Portafolio · página de proyecto" loading="lazy"><figcaption>Portafolio · página de proyecto</figcaption></figure><figure class="dl-l aparece" style="--ar:.425"><img src="img/lam-ia4.webp" alt="Roll-up vertical con la casa y fotos en círculo" data-titulo="DAMIAN Láminas · Roll-up 85 × 200 · Nórdico" loading="lazy"><figcaption>Roll-up · Nórdico</figcaption></figure></div>
+      <div class="dl-fila"><figure class="dl-l aparece" style="--ar:1.5"><img src="img/lam-ia0.webp" alt="Lámina de concurso horizontal con la casa al atardecer, planta y volúmenes" data-titulo="DAMIAN Láminas · Lámina de concurso · Concurso negro" loading="lazy" decoding="async"><figcaption>Lámina de concurso · Concurso negro</figcaption></figure><figure class="dl-l aparece" style="--ar:.6667"><img src="img/lam-ia1.webp" alt="Póster vertical con la fachada de la casa" data-titulo="DAMIAN Láminas · Póster · Brutalista concreto" loading="lazy" decoding="async"><figcaption>Póster · Brutalista concreto</figcaption></figure><figure class="dl-l aparece" style="--ar:.6667"><img src="img/lam-ia2.webp" alt="Lámina cinematográfica vertical con renders de día y de noche" data-titulo="DAMIAN Láminas · Cinematográfica · Lujo dorado" loading="lazy" decoding="async"><figcaption>Cinematográfica · Lujo dorado</figcaption></figure></div>
+      <div class="dl-fila"><figure class="dl-l aparece" style="--ar:1.5"><img src="img/lam-ia3.webp" alt="Mosaico de fotos con renders y datos del proyecto" data-titulo="DAMIAN Láminas · Mosaico de fotos · Editorial" loading="lazy" decoding="async"><figcaption>Mosaico de fotos · Editorial</figcaption></figure><figure class="dl-l aparece" style="--ar:1.4144"><img src="img/lam-ia5.webp" alt="Página de portafolio con vista principal, detalle e interior" data-titulo="DAMIAN Láminas · Portafolio · página de proyecto" loading="lazy" decoding="async"><figcaption>Portafolio · página de proyecto</figcaption></figure><figure class="dl-l aparece" style="--ar:.425"><img src="img/lam-ia4.webp" alt="Roll-up vertical con la casa y fotos en círculo" data-titulo="DAMIAN Láminas · Roll-up 85 × 200 · Nórdico" loading="lazy" decoding="async"><figcaption>Roll-up · Nórdico</figcaption></figure></div>
     </div>
     <div class="dl-editor">
       <div class="ventana aparece"><div class="ventana-barra">Láminas y presentaciones · editor con plantillas de arquitectura</div><img src="img/lam-editor-ia.webp" alt="Editor de láminas de DAMIAN con la lámina cinematográfica de la casa y la galería de plantillas de arquitectura" data-titulo="DAMIAN Láminas · editor"></div>
@@ -809,8 +843,8 @@ img.captura { filter: grayscale(1) contrast(1.05) !important; transition: filter
         c.textContent.split(/(\s+)/).forEach((w) => { if (!w.trim()) f.append(w); else { const s = document.createElement('span'); s.className = 'pal'; s.style.setProperty('--i', i++); s.textContent = w; f.append(s); } }); c.replaceWith(f); }
         else if (c.nodeType === 1 && c.tagName !== 'BR') partir(c); });
       partir(t); }
-    document.addEventListener('pointermove', (e) => { const el = e.target.closest?.('.ventana, .tarjeta'); if (!el) return; const r = el.getBoundingClientRect();
-      el.style.setProperty('--mx', (e.clientX - r.left) + 'px'); el.style.setProperty('--my', (e.clientY - r.top) + 'px'); }, { passive: true }); })();
+    let pmE = null; document.addEventListener('pointermove', (ev) => { if (pmE) { pmE = ev; return; } pmE = ev; requestAnimationFrame(() => { const e = pmE; pmE = null; const el = e.target.closest?.('.ventana, .tarjeta'); if (!el) return; const r = el.getBoundingClientRect();
+      el.style.setProperty('--mx', (e.clientX - r.left) + 'px'); el.style.setProperty('--my', (e.clientY - r.top) + 'px'); }); }, { passive: true }); })();
 
   // v11: pantalla de carga, titulares con máscara, cursor, botones magnéticos y música
   (() => { const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -825,9 +859,11 @@ img.captura { filter: grayscale(1) contrast(1.05) !important; transition: filter
     // anillo del cursor con inercia; crece sobre lo que se puede abrir
     const an = document.getElementById('anillo');
     if (an && !quieto && matchMedia('(pointer: fine)').matches) { let x = innerWidth / 2, y = innerHeight / 2, ax = x, ay = y;
-      addEventListener('pointermove', (e) => { x = e.clientX; y = e.clientY; an.classList.add('activo'); an.classList.toggle('grande', !!e.target.closest?.('a, button, .rv, .dl-l, .hoja, .ventana img, .render img, .tarjeta img')); }, { passive: true });
+      addEventListener('pointermove', (e) => { x = e.clientX; y = e.clientY; if (!an.classList.contains('activo')) an.classList.add('activo'); const g = !!e.target.closest?.('a, button, .rv, .dl-l, .hoja, .ventana img, .render img, .tarjeta img'); if (g !== an.classList.contains('grande')) an.classList.toggle('grande', g); }, { passive: true });
       document.addEventListener('pointerleave', () => an.classList.remove('activo'));
-      const mover = () => { ax += (x - ax) * .18; ay += (y - ay) * .18; an.style.transform = `translate(${ax}px, ${ay}px)`; requestAnimationFrame(mover); }; mover(); }
+      let corre = false; const mover = () => { ax += (x - ax) * .2; ay += (y - ay) * .2; an.style.transform = `translate3d(${ax}px, ${ay}px, 0)`;
+        if (Math.abs(x - ax) + Math.abs(y - ay) > .3) requestAnimationFrame(mover); else corre = false; };
+      addEventListener('pointermove', () => { if (!corre) { corre = true; requestAnimationFrame(mover); } }, { passive: true }); }
     // botones magnéticos
     if (!quieto && matchMedia('(pointer: fine)').matches) document.querySelectorAll('.boton, .musica').forEach((b) => {
       b.addEventListener('pointermove', (e) => { const r = b.getBoundingClientRect(); b.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * .25}px, ${(e.clientY - r.top - r.height / 2) * .35}px)`; });
@@ -860,7 +896,7 @@ img.captura { filter: grayscale(1) contrast(1.05) !important; transition: filter
       const vista = document.querySelector(`[data-vista="${tira.dataset.grupo}"]`); const img = vista?.querySelector('img');
       const lab = document.createElement('span'); lab.className = 'cambia'; lab.textContent = `${bs.length} vistas · toca para cambiar`; tira.prepend(lab);
       bs.forEach((b) => { const t = b.textContent.trim(); b.classList.add('foto'); b.style.setProperty('--dur', DUR + 'ms');
-        b.innerHTML = `<span class="m-img"><img src="${b.dataset.src}" alt="" loading="lazy"><i class="m-prog"></i></span><span>${t}</span>`; });
+        b.innerHTML = `<span class="m-img"><img src="${b.dataset.src}" alt="" loading="lazy" decoding="async"><i class="m-prog"></i></span><span>${t}</span>`; });
       if (!vista || !img) return;
       vista.style.position = 'relative';
       const ctr = document.createElement('span'); ctr.className = 'contador'; vista.append(ctr);
@@ -881,12 +917,14 @@ img.captura { filter: grayscale(1) contrast(1.05) !important; transition: filter
   // v13: franja que corre con el scroll; inclinación 3D con brillo en renders, láminas y en la foto de portada
   (() => { if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const f = document.getElementById('franja');
-    if (f) { let y0 = 0, x = 0, vel = 0; const loop = () => { const y = scrollY; vel += (y - y0) * .08; y0 = y; vel *= .9; x -= .35 + Math.abs(vel) * .6;
-        const w = f.scrollWidth / 2; if (-x > w) x += w; f.style.transform = `translate3d(${x}px,0,0) skewX(${Math.max(-12, Math.min(12, -vel * .8))}deg)`; requestAnimationFrame(loop); }; loop(); }
+    if (f) { let y0 = scrollY, x = 0, vel = 0, ve = false, ancho = 0; const medir = () => { ancho = f.scrollWidth / 2; }; medir(); addEventListener('resize', medir);
+      new IntersectionObserver((es) => { const antes = ve; ve = es[0].isIntersecting; if (ve && !antes) { y0 = scrollY; requestAnimationFrame(loop); } }).observe(f.parentElement);
+      const loop = () => { if (!ve) return; const y = scrollY; vel += (y - y0) * .08; y0 = y; vel *= .9; x -= .35 + Math.abs(vel) * .6;
+        if (-x > ancho) x += ancho; f.style.transform = `translate3d(${x}px,0,0) skewX(${Math.max(-12, Math.min(12, -vel * .8)).toFixed(2)}deg)`; requestAnimationFrame(loop); }; }
     if (!matchMedia('(pointer: fine)').matches) return;
     document.querySelectorAll('.rv, .dl-l, .portada .render, .hoja').forEach((el) => { el.classList.add('inclina'); const g = document.createElement('span'); g.className = 'brilla'; el.append(g);
-      el.addEventListener('pointermove', (e) => { const r = el.getBoundingClientRect(), px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
-        el.style.transform = `perspective(900px) rotateX(${(.5 - py) * 7}deg) rotateY(${(px - .5) * 9}deg) translateZ(0)`; el.style.setProperty('--gx', px * 100 + '%'); el.style.setProperty('--gy', py * 100 + '%'); });
+      let pend = null; el.addEventListener('pointermove', (e) => { if (pend) { pend = e; return; } pend = e; requestAnimationFrame(() => { const e = pend; pend = null; const r = el.getBoundingClientRect(), px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
+        el.style.transform = `perspective(900px) rotateX(${(.5 - py) * 7}deg) rotateY(${(px - .5) * 9}deg) translateZ(0)`; el.style.setProperty('--gx', px * 100 + '%'); el.style.setProperty('--gy', py * 100 + '%'); }); });
       el.addEventListener('pointerleave', () => { el.style.transition = 'transform .6s cubic-bezier(.2, .8, .2, 1)'; el.style.transform = ''; setTimeout(() => el.style.transition = '', 600); });
       el.addEventListener('pointerenter', () => { el.style.transition = 'transform .15s ease-out'; }); }); })();
   // visor a pantalla completa
