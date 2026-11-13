@@ -871,22 +871,23 @@ h2 em .wi, h2 .acento .wi { animation: none !important; background-position: 30%
     // música: activa por omisión y bajita. El navegador solo deja sonar después de un gesto (clic, tecla, toque soltado),
     // así que se intenta al abrir y en cada gesto hasta que suena; el botón dice «Toca para escuchar» mientras tanto
     const mb = document.getElementById('musica'), pista = document.getElementById('pista'), txt = document.getElementById('musicaTxt'), BAJO = .14; let fade = 0;
-    let apagada = false; try { apagada = localStorage.getItem('damian-musica') === 'no'; } catch {}
+    let apagada = false; try { localStorage.removeItem('damian-musica'); } catch {}
     const volumen = (meta, fin) => { clearInterval(fade); fade = setInterval(() => { const v = pista.volume + (meta > pista.volume ? .02 : -.02);
       if ((meta > pista.volume && v >= meta) || (meta <= pista.volume && v <= meta)) { pista.volume = meta; clearInterval(fade); fin && fin(); } else pista.volume = Math.max(0, Math.min(1, v)); }, 60); };
     const pintar = () => { const suena = !pista.paused && !apagada; mb.setAttribute('aria-pressed', String(suena)); mb.setAttribute('aria-label', suena ? 'Silenciar música' : 'Activar música');
       txt.textContent = apagada ? 'Sin sonido' : (suena ? 'Sonando' : 'Toca para escuchar'); mb.classList.toggle('espera', !apagada && !suena); };
     const sonar = () => { if (!pista.paused) return Promise.resolve(true); pista.volume = 0; return pista.play().then(() => { volumen(BAJO); pintar(); return true; }).catch(() => { pintar(); return false; }); };
-    const gestos = ['click', 'keydown', 'touchend', 'pointerup'];
+    const gestos = ['pointerdown', 'mousedown', 'keydown', 'touchstart', 'touchend', 'pointerup', 'click'];
     const quitar = () => gestos.forEach((g) => removeEventListener(g, alGesto, true));
     function alGesto(e) { if (apagada || e.target.closest?.('#musica')) return; sonar().then((ok) => { if (ok) quitar(); }); }
     pista.addEventListener('play', pintar); pista.addEventListener('pause', pintar);
     if (!apagada) { gestos.forEach((g) => addEventListener(g, alGesto, true)); sonar().then((ok) => { if (ok) quitar(); }); }
     pintar();
     mb?.addEventListener('click', () => {
-      if (apagada || pista.paused) { apagada = false; try { localStorage.setItem('damian-musica', 'si'); } catch {} sonar(); }
-      else { apagada = true; try { localStorage.setItem('damian-musica', 'no'); } catch {} volumen(0, () => { pista.pause(); pintar(); }); pintar(); } });
-    document.addEventListener('visibilitychange', () => { if (document.hidden && !pista.paused) pista.pause(); else if (!document.hidden && !apagada && mb?.getAttribute('aria-pressed') === 'true') pista.play().catch(() => {}); });
+      if (apagada || pista.paused) { apagada = false; sonar(); }
+      else { apagada = true; volumen(0, () => { pista.pause(); pintar(); }); pintar(); } });
+    document.addEventListener('visibilitychange', () => { if (document.hidden) { if (!pista.paused) pista.pause(); } else if (!apagada) sonar(); });
+    addEventListener('focus', () => { if (!apagada) sonar(); }); addEventListener('pageshow', () => { if (!apagada) sonar(); });
   })();
 
   // v12: capturas de la app en grises; selector de fotos con miniaturas, flechas, contador y avance automático
