@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="DAMIAN: diseña, presupuesta y construye en una app. Caso de estudio Casa Las Lomas: planos, 3D, renders, láminas y presupuesto.">
+<meta property="og:title" content="DAMIAN · Portafolio">
+<meta property="og:description" content="Diseña, presupuesta y construye en una app.">
+<meta property="og:image" content="img/render.webp">
+<meta name="theme-color" content="#071426">
+<title>DAMIAN Portafolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Concepto: la marca DAMIAN (azul marino, naranja de obra, acero) sobre papel de plano. Portada nocturna con el render; el resto, hojas con retícula. */
+:root {
+  --papel: #f3f5f8; --papel-2: #e7ecf2; --tinta: #0c1d33; --tinta-2: #4a5b70; --linea: #cdd6e0; --reticula: rgb(12 29 51 / .05);
+  --marino: #0b2240; --marino-2: #10305a; --noche: #071426; --naranja: #ee7a1b; --naranja-2: #ff9a3d; --acero: #a8b6c6;
+  --marco: #ffffff; --sobre-marino: #e9eef5; --sobre-marino-2: #9fb2c8;
+  --f-display: "Archivo", "Arial Narrow", system-ui, sans-serif; --f-texto: "IBM Plex Sans", system-ui, sans-serif; --f-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  --sombra: 0 36px 70px -34px rgb(7 20 38 / .55), 0 2px 8px rgb(7 20 38 / .08);
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --papel: #0a1626; --papel-2: #0f1f33; --tinta: #e8eef6; --tinta-2: #9fb2c8; --linea: #22374f; --reticula: rgb(160 200 240 / .055);
+  --marco: #11243b; --sombra: 0 36px 70px -34px rgb(0 0 0 / .85), 0 2px 8px rgb(0 0 0 / .3); color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --papel: #0a1626; --papel-2: #0f1f33; --tinta: #e8eef6; --tinta-2: #9fb2c8; --linea: #22374f; --reticula: rgb(160 200 240 / .055);
+  --marco: #11243b; --sombra: 0 36px 70px -34px rgb(0 0 0 / .85), 0 2px 8px rgb(0 0 0 / .3); color-scheme: dark; }
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--papel); color: var(--tinta); font: 16px/1.6 var(--f-texto); overflow-x: hidden;
+  background-image: linear-gradient(var(--reticula) 1px, transparent 1px), linear-gradient(90deg, var(--reticula) 1px, transparent 1px); background-size: 24px 24px; }
+.env { max-width: 1240px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0; }
+p { margin: 0; }
+img { max-width: 100%; }
+.etq { font: 500 12px/1.2 var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--naranja); }
+:focus-visible { outline: 2px solid var(--naranja); outline-offset: 3px; }
+
+/* barra de avance de lectura */
+.avance-lectura { position: fixed; top: env(safe-area-inset-top, 0px); left: 0; height: 3px; width: 100%; z-index: 40; background: linear-gradient(90deg, var(--naranja), var(--naranja-2)); transform-origin: 0 50%; transform: scaleX(0); }
+@supports (animation-timeline: scroll()) { .avance-lectura { animation: crecer linear both; animation-timeline: scroll(root); } @keyframes crecer { to { transform: scaleX(1); } } }
+
+/* ---------- portada nocturna ---------- */
+.portada { position: relative; background: radial-gradient(1200px 600px at 78% 30%, #173f6e 0%, transparent 60%), linear-gradient(180deg, var(--noche), var(--marino) 70%, var(--marino-2)); color: var(--sobre-marino); overflow: hidden; isolation: isolate; }
+.portada::before { content: ""; position: absolute; inset: 0; z-index: -1; background-image: linear-gradient(rgb(255 255 255 / .045) 1px, transparent 1px), linear-gradient(90deg, rgb(255 255 255 / .045) 1px, transparent 1px); background-size: 32px 32px; mask-image: linear-gradient(180deg, #000 30%, transparent); }
+.plano-fondo { position: absolute; inset: auto -40px -30px auto; width: min(720px, 80vw); z-index: -1; opacity: .5; }
+.plano-fondo path, .plano-fondo rect, .plano-fondo line, .plano-fondo circle { fill: none; stroke: var(--acero); stroke-width: 1.2; vector-effect: non-scaling-stroke; }
+.plano-fondo .n { stroke: var(--naranja); }
+.portada-in { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.25fr); gap: 48px; align-items: center; padding-block: 56px 72px; }
+.marca { display: flex; align-items: center; gap: 18px; margin-bottom: 30px; }
+.logo { position: relative; width: 112px; height: 112px; flex: none; }
+.logo img { width: 100%; height: 100%; object-fit: contain; position: relative; z-index: 1; filter: drop-shadow(0 10px 24px rgb(0 0 0 / .45)); }
+.logo .orbita { position: absolute; inset: -12px; border-radius: 50%; border: 1.5px dashed rgb(238 122 27 / .55); }
+.marca b { display: block; font: 900 30px/1 var(--f-display); font-stretch: 120%; letter-spacing: .04em; color: #fff; }
+.marca small { font: 500 12px/1.4 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--sobre-marino-2); }
+.titular { font: 900 clamp(40px, 5vw, 72px)/.96 var(--f-display); font-stretch: 100%; letter-spacing: -.01em; color: #fff; overflow-wrap: anywhere; }
+.titular .p { display: inline-block; }
+.titular em { font-style: normal; color: var(--naranja); }
+.bajada { margin-top: 22px; max-width: 46ch; font-size: 17px; color: var(--sobre-marino-2); }
+.bajada b { color: var(--sobre-marino); font-weight: 600; }
+.acciones { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+.boton { display: inline-flex; align-items: center; gap: 8px; padding: 12px 18px; font: 600 15px/1 var(--f-texto); text-decoration: none; border-radius: 999px; border: 1.5px solid transparent; transition: transform .2s, background .2s; }
+.boton.lleno { background: var(--naranja); color: #1a0d00; }
+.boton.lleno:hover { background: var(--naranja-2); transform: translateY(-2px); }
+.boton.borde { border-color: rgb(255 255 255 / .35); color: #fff; }
+.boton.borde:hover { background: rgb(255 255 255 / .08); transform: translateY(-2px); }
+.render { position: relative; perspective: 1400px; }
+.render figure { margin: 0; border-radius: 16px; overflow: hidden; box-shadow: 0 50px 90px -40px rgb(0 0 0 / .9), 0 0 0 1px rgb(255 255 255 / .1); transform-style: preserve-3d; transition: transform .35s ease-out; }
+.render img { display: block; width: 100%; aspect-ratio: 16 / 8.7; object-fit: cover; cursor: zoom-in; }
+.render figcaption { position: absolute; left: 16px; bottom: 14px; padding: 8px 12px; font: 500 12px/1.3 var(--f-mono); color: #fff; background: rgb(7 20 38 / .72); backdrop-filter: blur(6px); border-radius: 8px; }
+.chip-flota { position: absolute; padding: 10px 14px; border-radius: 12px; background: var(--marco); color: var(--tinta); box-shadow: var(--sombra); font-size: 13px; line-height: 1.3; }
+.chip-flota b { display: block; font: 800 22px/1.05 var(--f-display); font-variant-numeric: tabular-nums; color: var(--tinta); }
+.chip-flota .etq { font-size: 10.5px; }
+.cf1 { left: -28px; top: 14%; } .cf2 { right: -18px; bottom: -26px; }
+
+/* cinta de módulos */
+.cinta { background: var(--naranja); color: #1a0d00; overflow: hidden; white-space: nowrap; border-block: 1px solid rgb(0 0 0 / .15); }
+.cinta-in { display: inline-flex; gap: 40px; padding-block: 12px; font: 800 15px/1 var(--f-display); font-stretch: 115%; letter-spacing: .06em; text-transform: uppercase; }
+.cinta-in span::after { content: "◆"; margin-left: 40px; font-size: 10px; vertical-align: middle; opacity: .6; }
+
+/* ---------- caso: Casa Las Lomas ---------- */
+.caso-cab { padding-block: 88px 28px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; align-items: end; }
+.caso-cab h2 { font-size: clamp(36px, 5vw, 64px); font-weight: 900; font-stretch: 112%; line-height: .98; }
+.caso-cab h2 span { color: var(--naranja); }
+.caso-cab p { color: var(--tinta-2); max-width: 54ch; }
+.ficha { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); border: 1.5px solid var(--tinta); background: var(--marco); }
+.ficha div { padding: 16px 16px 14px; border-right: 1px solid var(--linea); }
+.ficha div:last-child { border-right: 0; }
+.ficha small { display: block; font: 500 11px/1.2 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--tinta-2); }
+.ficha b { display: block; margin-top: 8px; font: 800 clamp(20px, 2.3vw, 30px)/1 var(--f-display); font-variant-numeric: tabular-nums; }
+.nota-ilus { margin-top: 10px; font: 400 12.5px/1.5 var(--f-mono); color: var(--tinta-2); }
+
+.pasos { position: relative; padding-block: 56px 24px; display: grid; gap: 96px; }
+.pasos::before { content: ""; position: absolute; left: 31px; top: 70px; bottom: 40px; width: 2px; background: linear-gradient(var(--naranja), var(--linea)); }
+.paso { display: grid; grid-template-columns: 64px minmax(0, .82fr) minmax(0, 1.4fr); gap: 32px; align-items: start; position: relative; }
+.paso .num { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; background: var(--marino); color: #fff; font: 800 20px/1 var(--f-display); font-variant-numeric: tabular-nums; box-shadow: 0 0 0 6px var(--papel), 0 0 0 7.5px var(--naranja); position: relative; z-index: 1; }
+.paso h3 { font-size: clamp(24px, 2.6vw, 34px); font-weight: 800; line-height: 1.05; margin: 6px 0 12px; }
+.paso p { color: var(--tinta-2); }
+.paso .datos { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.paso .datos span { font: 500 12.5px/1 var(--f-mono); padding: 7px 10px; border: 1px solid var(--linea); background: var(--marco); border-radius: 999px; }
+.paso .datos span b { color: var(--naranja); font-weight: 500; }
+.ventana { background: var(--marco); border: 1px solid var(--linea); box-shadow: var(--sombra); overflow: hidden; border-radius: 12px; transition: transform .35s ease-out, box-shadow .35s; }
+.ventana-barra { display: flex; align-items: center; gap: 8px; padding: 9px 14px; border-bottom: 1px solid var(--linea); font: 500 12px/1 var(--f-mono); color: var(--tinta-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ventana-barra::before { content: ""; flex: none; width: 34px; height: 8px; background: radial-gradient(circle, var(--linea) 3.5px, transparent 4px) 0 0 / 12px 8px repeat-x; }
+.ventana img { display: block; width: 100%; height: auto; aspect-ratio: 1600 / 960; object-fit: cover; object-position: left top; cursor: zoom-in; transition: opacity .3s; }
+.dupla { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; }
+.dupla .ventana img { aspect-ratio: 16 / 10; }
+.tira-mini { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+.mini { all: unset; cursor: pointer; font: 500 12.5px/1 var(--f-texto); padding: 8px 12px; border-radius: 999px; border: 1px solid var(--linea); background: var(--marco); color: var(--tinta-2); transition: all .2s; }
+.mini:hover { color: var(--tinta); border-color: var(--tinta-2); }
+.mini[aria-pressed="true"] { background: var(--marino); border-color: var(--marino); color: #fff; }
+.mini:focus-visible { outline: 2px solid var(--naranja); outline-offset: 2px; }
+.barra-plazo { margin-top: 18px; display: grid; gap: 6px; }
+.barra-plazo .riel { height: 12px; border-radius: 999px; background: var(--papel-2); overflow: hidden; border: 1px solid var(--linea); }
+.barra-plazo .lleno { height: 100%; width: 74%; background: repeating-linear-gradient(135deg, var(--naranja) 0 10px, var(--naranja-2) 10px 20px); border-radius: inherit; }
+.barra-plazo small { display: flex; justify-content: space-between; font: 500 12px/1 var(--f-mono); color: var(--tinta-2); }
+
+/* muro de láminas */
+.laminas { padding-block: 96px 40px; }
+.laminas-cab { display: flex; justify-content: space-between; align-items: end; gap: 24px; flex-wrap: wrap; margin-bottom: 30px; }
+.laminas-cab h2 { font-size: clamp(32px, 4.4vw, 54px); font-weight: 900; font-stretch: 110%; line-height: 1; }
+.laminas-cab p { color: var(--tinta-2); max-width: 44ch; }
+.muro { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+.hoja { margin: 0; background: #fff; padding: 10px; border: 1px solid var(--linea); box-shadow: var(--sombra); transition: transform .3s, box-shadow .3s; cursor: zoom-in; }
+.hoja:nth-child(odd) { transform: rotate(-.7deg); } .hoja:nth-child(even) { transform: rotate(.6deg); }
+.hoja:hover { transform: rotate(0) translateY(-6px) scale(1.02); z-index: 2; }
+.hoja img { display: block; width: 100%; aspect-ratio: 1.414; object-fit: cover; }
+.hoja figcaption { display: flex; justify-content: space-between; gap: 8px; padding: 10px 2px 2px; font: 500 12px/1.3 var(--f-mono); color: #4a5b70; }
+.hoja figcaption b { color: #0c1d33; font-weight: 600; }
+
+/* ---------- módulos ---------- */
+.modulos { padding-block: 96px 40px; }
+.modulos > h2 { font-size: clamp(32px, 4.4vw, 54px); font-weight: 900; font-stretch: 110%; line-height: 1; max-width: 18ch; }
+.rejilla { margin-top: 36px; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 20px; }
+.tarjeta { grid-column: span 4; background: var(--marco); border: 1px solid var(--linea); border-radius: 14px; overflow: hidden; display: grid; grid-template-rows: auto 1fr; transition: transform .3s, box-shadow .3s; }
+.tarjeta.ancha { grid-column: span 8; }
+.tarjeta:hover { transform: translateY(-4px); box-shadow: var(--sombra); }
+.tarjeta img { display: block; width: 100%; aspect-ratio: 16 / 9.6; object-fit: cover; object-position: left top; border-bottom: 1px solid var(--linea); cursor: zoom-in; }
+.tarjeta div { padding: 16px 18px 18px; }
+.tarjeta .etq { font-size: 11px; }
+.tarjeta h3 { font-size: 21px; font-weight: 800; margin: 6px 0 6px; }
+.tarjeta p { font-size: 14.5px; color: var(--tinta-2); line-height: 1.5; }
+
+/* cifras de DAMIAN */
+.cifras { margin-top: 64px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 2px solid var(--tinta); }
+.cifra { padding: 22px 18px 20px; border-right: 1px solid var(--linea); }
+.cifra:last-child { border-right: 0; }
+.cifra b { display: block; font: 900 clamp(32px, 4.4vw, 54px)/1 var(--f-display); font-stretch: 110%; font-variant-numeric: tabular-nums; }
+.cifra span { display: block; margin-top: 8px; font-size: 14px; color: var(--tinta-2); line-height: 1.4; }
+
+/* cierre */
+.cierre { margin-top: 96px; background: var(--marino); color: var(--sobre-marino); position: relative; overflow: hidden; }
+.cierre::before { content: ""; position: absolute; inset: 0; background-image: linear-gradient(rgb(255 255 255 / .04) 1px, transparent 1px), linear-gradient(90deg, rgb(255 255 255 / .04) 1px, transparent 1px); background-size: 24px 24px; }
+.cierre-in { position: relative; padding-block: 88px 64px; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 48px; align-items: end; }
+.cierre h2 { font-size: clamp(40px, 6vw, 80px); font-weight: 900; font-stretch: 112%; line-height: .95; color: #fff; }
+.cierre h2 span { color: var(--naranja); }
+.reglas { display: grid; gap: 14px; }
+.reglas div { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 14px; padding-top: 12px; border-top: 1px solid rgb(255 255 255 / .16); font-size: 15px; }
+.reglas b { font: 500 12px/1.6 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--naranja-2); }
+.pie { position: relative; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; padding-block: 22px 32px; border-top: 1px solid rgb(255 255 255 / .12); font: 500 12px/1.5 var(--f-mono); color: var(--sobre-marino-2); }
+.pie img { width: 44px; height: 44px; vertical-align: middle; margin-right: 10px; }
+
+/* visor */
+.visor[hidden] { display: none !important; }
+.visor { position: fixed; inset: 0; z-index: 50; background: rgb(4 10 20 / .92); display: grid; place-items: center; padding: max(20px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(20px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
+.visor img { max-width: 100%; max-height: 84vh; box-shadow: 0 30px 80px rgb(0 0 0 / .6); background: #fff; border-radius: 6px; }
+.visor p { color: #cfd8e3; font: 500 13px/1.4 var(--f-mono); margin-top: 12px; text-align: center; }
+.visor button { position: absolute; top: max(14px, env(safe-area-inset-top, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); font: 600 14px/1 var(--f-texto); color: #fff; background: rgb(255 255 255 / .12); border: 1px solid rgb(255 255 255 / .3); padding: 10px 14px; border-radius: 999px; cursor: pointer; }
+
+/* ---------- movimiento ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .logo img { animation: entraLogo 1s cubic-bezier(.2, .9, .2, 1.2) both; }
+  .logo .orbita { animation: aparece .6s .5s both, girar 22s linear infinite; }
+  .marca div { animation: subir .8s .25s cubic-bezier(.2, .8, .2, 1) both; }
+  .titular .p { animation: subirPalabra .9s cubic-bezier(.2, .8, .2, 1) both; }
+  .titular .p:nth-child(2) { animation-delay: .1s; } .titular .p:nth-child(3) { animation-delay: .2s; } .titular .p:nth-child(4) { animation-delay: .3s; } .titular .p:nth-child(5) { animation-delay: .4s; }
+  .bajada, .acciones { animation: subir .9s .55s cubic-bezier(.2, .8, .2, 1) both; }
+  .render figure { animation: revelar 1.3s .2s cubic-bezier(.7, 0, .2, 1) both; }
+  .chip-flota { animation: flotar 6s ease-in-out infinite, aparece .6s 1.2s both; }
+  .cf2 { animation-delay: -3s, 1.4s; }
+  .plano-fondo .d { stroke-dasharray: 1400; animation: dibujar 3.2s .3s ease-out both; }
+  .plano-fondo .n { animation: parpadeo 2.4s 3s ease-in-out infinite; }
+  .cinta-in { animation: correr 38s linear infinite; }
+  .ventana:hover { transform: translateY(-4px); }
+  .barra-plazo .lleno { animation: llenar 2.2s .2s cubic-bezier(.2, .8, .2, 1) both; }
+  @keyframes entraLogo { from { transform: scale(.6) rotate(-14deg); } }
+  @keyframes girar { to { transform: rotate(360deg); } }
+  @keyframes aparece { from { opacity: 0; } }
+  @keyframes subir { from { transform: translateY(22px); } }
+  @keyframes subirPalabra { from { transform: translateY(.45em) rotate(2deg); opacity: .15; } }
+  @keyframes revelar { from { clip-path: inset(0 0 0 100% round 16px); transform: scale(1.04); } to { clip-path: inset(0 0 0 0 round 16px); } }
+  @keyframes flotar { 50% { transform: translateY(-10px); } }
+  @keyframes dibujar { from { stroke-dashoffset: 1400; } to { stroke-dashoffset: 0; } }
+  @keyframes parpadeo { 50% { opacity: .35; } }
+  @keyframes correr { to { transform: translateX(-50%); } }
+  @keyframes llenar { from { width: 0; } }
+  /* aparición al desplazarse: solo movimiento y un leve desvanecido; en reposo todo se ve */
+  @supports (animation-timeline: view()) {
+    .aparece { animation: alVer linear both; animation-timeline: view(); animation-range: entry 0% cover 28%; }
+    .paso .num { animation: pulso linear both; animation-timeline: view(); animation-range: entry 10% cover 35%; }
+    .hoja { animation: caerHoja linear both; animation-timeline: view(); animation-range: entry 0% cover 30%; }
+    @keyframes alVer { from { transform: translateY(56px) scale(.97); opacity: .35; } }
+    @keyframes pulso { from { transform: scale(.4); background: var(--naranja); } }
+    @keyframes caerHoja { from { translate: 0 70px; opacity: .3; } }
+  }
+}
+
+@media (max-width: 980px) {
+  .portada-in, .caso-cab, .cierre-in { grid-template-columns: minmax(0, 1fr); }
+  .cf1 { left: 8px; top: -18px; } .cf2 { right: 8px; }
+  .paso { grid-template-columns: 48px minmax(0, 1fr); gap: 18px; }
+  .paso .num { width: 48px; height: 48px; font-size: 16px; }
+  .paso > .vis { grid-column: 2; }
+  .pasos::before { left: 23px; }
+  .ficha { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .ficha div:nth-child(3) { border-right: 0; } .ficha div:nth-child(-n+3) { border-bottom: 1px solid var(--linea); }
+  .muro { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tarjeta, .tarjeta.ancha { grid-column: span 6; }
+  .cifras { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cifra:nth-child(2) { border-right: 0; } .cifra:nth-child(-n+2) { border-bottom: 1px solid var(--linea); }
+}
+@media (max-width: 620px) {
+  .ficha { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ficha div { border-right: 1px solid var(--linea) !important; border-bottom: 1px solid var(--linea); }
+  .ficha div:nth-child(2n) { border-right: 0 !important; }
+  .muro, .dupla { grid-template-columns: minmax(0, 1fr); }
+  .tarjeta, .tarjeta.ancha { grid-column: span 12; }
+  .chip-flota { display: none; }
+  .reglas div { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .logo { width: 84px; height: 84px; }
+}
+
+/* ---------- logotipo de la app (mismas rutas que app/js/app/marca.js) ---------- */
+.dm { display: flex; align-items: center; gap: 16px; color: #f3efe6; }
+.dm .dm-mark { width: 92px; height: auto; flex: none; filter: drop-shadow(0 10px 22px rgb(0 0 0 / .5)); }
+.dm .dm-word { width: 200px; height: auto; display: block; }
+.dm small { display: block; margin-top: 8px; font: 500 11.5px/1.4 var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--sobre-marino-2); }
+.dm-l { stroke-dasharray: 1; }
+.pie .dm-mark { width: 26px; height: auto; vertical-align: middle; margin-right: 10px; color: #f3efe6; }
+.menu-app { display: inline-flex; align-items: center; gap: 10px; padding: 12px 16px; border-radius: 12px; background: #0b0f14; color: #f3efe6; border: 1px solid rgb(255 255 255 / .1); box-shadow: 0 18px 40px -18px rgb(0 0 0 / .8); }
+.menu-app .dm-mark { width: 34px; height: auto; } .menu-app .dm-word { width: 104px; height: auto; }
+
+
+@media (prefers-reduced-motion: no-preference) {
+  .dm .dm-mark { animation: entraLogo 1s cubic-bezier(.2, .9, .2, 1.2) both; }
+  .dm .dm-l { animation: escribir .7s calc(.5s + var(--i) * .1s) cubic-bezier(.6, 0, .2, 1) both; }
+  @keyframes escribir { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+}
+@media (max-width: 620px) { .dm .dm-mark { width: 70px; } .dm .dm-word { width: 160px; } }
+
+/* ---------- banda inicial: la D de DAMIAN que forman las vigas doradas de la apertura, en bucle ---------- */
+.intro { position: relative; background: #000; overflow: hidden; height: min(86vh, 56.25vw); min-height: 300px; display: grid; place-items: center; }
+.intro-caja { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); aspect-ratio: 16 / 9; width: max(100%, calc(min(86vh, 56.25vw) * 16 / 9)); }
+.intro video { position: absolute; inset: 0; width: 100%; height: 100%; display: block; transition: opacity .5s ease; }
+.intro-d { position: absolute; left: 36.646%; top: 18.889%; width: 24.792%; height: auto; color: #f3efe6; opacity: 0; }
+.intro-w { position: absolute; left: 50%; top: 68.5%; width: 21%; height: auto; transform: translateX(-50%); color: #f3efe6; }
+.intro-w .dm-l { stroke-dasharray: 1; stroke-dashoffset: 1; }
+.intro-ley { position: absolute; left: 0; right: 0; top: 77.5%; text-align: center; font: 500 clamp(9px, .78vw, 15px)/1 var(--f-mono); letter-spacing: .32em; text-transform: uppercase; color: #c9b48f; opacity: 0; }
+.intro.final .intro-d { opacity: 1; animation: brilloD 1.6s ease-out both; }
+.intro.final .intro-w .dm-l { transition: stroke-dashoffset .75s cubic-bezier(.6, 0, .2, 1) calc(var(--i) * .12s); stroke-dashoffset: 0; }
+.intro.final .intro-ley { transition: opacity .8s ease .85s; opacity: 1; }
+.intro.sale .intro-d, .intro.sale .intro-w, .intro.sale .intro-ley { transition: opacity .6s ease; opacity: 0; }
+@keyframes brilloD { from { filter: drop-shadow(0 0 40px rgb(255 214 150 / .85)); } to { filter: drop-shadow(0 0 0 rgb(255 214 150 / 0)); } }
+.intro::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 22%; background: linear-gradient(transparent, #071426); pointer-events: none; }
+.bajar { position: absolute; left: 50%; bottom: 18px; z-index: 2; transform: translateX(-50%); font: 500 11px/1 var(--f-mono); letter-spacing: .2em; text-transform: uppercase; color: #c9b48f; text-decoration: none; padding: 10px 14px; }
+@media (prefers-reduced-motion: no-preference) { .bajar { animation: flotar 2.6s ease-in-out infinite; } }
+.repetir-intro { font: 500 12px/1 var(--f-mono); color: var(--sobre-marino-2); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+
+/* ---------- DAMIAN Láminas ---------- */
+.dl { position: relative; background: radial-gradient(900px 520px at 85% 0%, #3a2408 0%, transparent 60%), radial-gradient(800px 600px at 0% 100%, #102a4c 0%, transparent 60%), #0a0d12; color: #ece6da; padding-block: 96px 88px; overflow: hidden; isolation: isolate; }
+.dl::before { content: ""; position: absolute; inset: 0; z-index: -1; background-image: linear-gradient(rgb(255 255 255 / .03) 1px, transparent 1px), linear-gradient(90deg, rgb(255 255 255 / .03) 1px, transparent 1px); background-size: 40px 40px; }
+.dl-cab { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 48px; align-items: end; margin-bottom: 44px; }
+.dl-marca { display: inline-flex; align-items: center; gap: 10px; font: 600 13px/1 var(--f-mono); letter-spacing: .18em; text-transform: uppercase; color: #e9c27a; }
+.dl-marca i { width: 28px; height: 2px; background: #e9c27a; display: block; }
+.dl h2 { font-size: clamp(38px, 5.2vw, 72px); line-height: .98; font-weight: 900; font-stretch: 112%; color: #fff; margin-top: 14px; }
+.dl h2 em { font-style: normal; color: #e9c27a; }
+.dl-cab > p { color: #c8bfb0; font-size: 17px; max-width: 48ch; }
+.dl-cifras { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-block: 1px solid rgb(255 255 255 / .12); margin-bottom: 48px; }
+.dl-cifras div { padding: 20px 18px; border-right: 1px solid rgb(255 255 255 / .12); }
+.dl-cifras div:last-child { border-right: 0; }
+.dl-cifras b { display: block; font: 900 clamp(30px, 3.4vw, 46px)/1 var(--f-display); font-stretch: 110%; color: #fff; }
+.dl-cifras span { display: block; margin-top: 8px; font-size: 13.5px; color: #b9ae9c; }
+.dl-muro { display: grid; gap: 16px; } .dl-fila { display: flex; gap: 16px; align-items: flex-start; }
+.dl-l { margin: 0; position: relative; border-radius: 6px; overflow: hidden; background: #000; box-shadow: 0 40px 70px -40px rgb(0 0 0 / .9), 0 0 0 1px rgb(255 255 255 / .06); cursor: zoom-in; transition: transform .5s cubic-bezier(.2, .8, .2, 1); }
+.dl-l:hover { transform: translateY(-6px) rotate(-.4deg); }
+.dl-l img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.dl-l::after { content: "Fotos IA"; position: absolute; top: 10px; right: 10px; font: 600 10px/1 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: #1a1206; background: #e9c27a; padding: 5px 8px; border-radius: 999px; }
+.dl-l figcaption { position: absolute; left: 10px; bottom: 10px; font: 500 11px/1.2 var(--f-mono); letter-spacing: .06em; color: #fff; background: rgb(0 0 0 / .6); backdrop-filter: blur(6px); padding: 6px 9px; border-radius: 999px; }
+.dl-l { flex: var(--ar) 1 0; min-width: 0; aspect-ratio: var(--ar); }
+.dl-editor { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, .65fr); gap: 40px; align-items: center; margin-top: 64px; }
+.dl-editor .ventana { box-shadow: 0 50px 90px -40px rgb(0 0 0 / .95); }
+.dl-lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+.dl-lista li { padding: 14px 0; border-top: 1px solid rgb(255 255 255 / .12); font-size: 15px; color: #d9d1c3; }
+.dl-lista b { display: block; font: 600 12px/1.6 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: #e9c27a; }
+.dl-formatos { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+.dl-formatos span { font: 500 12px/1 var(--f-mono); color: #ece6da; border: 1px solid rgb(255 255 255 / .2); border-radius: 999px; padding: 8px 11px; }
+@media (max-width: 980px) { .dl-cab, .dl-editor { grid-template-columns: minmax(0, 1fr); } .dl-cifras { grid-template-columns: repeat(2, minmax(0, 1fr)); } .dl-cifras div:nth-child(2) { border-right: 0; } .dl-fila { flex-wrap: wrap; } .dl-l { flex-basis: 40%; } }
+
+/* ---------- galería de renders ---------- */
+.rvs { background: #06080c; color: #ece6da; padding-block: 96px 72px; }
+.rvs-cab { display: flex; justify-content: space-between; align-items: end; gap: 32px; flex-wrap: wrap; margin-bottom: 36px; }
+.rvs h2 { font-size: clamp(36px, 4.6vw, 64px); line-height: 1; font-weight: 900; font-stretch: 112%; color: #fff; margin-top: 12px; }
+.rvs-cab p { color: #b9ae9c; max-width: 46ch; font-size: 16px; }
+.rvs-red { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.rv { margin: 0; position: relative; overflow: hidden; border-radius: 6px; aspect-ratio: 16 / 9; cursor: zoom-in; background: #111; }
+.rv:first-child { grid-column: span 2; grid-row: span 2; }
+.rv img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 1.2s cubic-bezier(.2, .8, .2, 1); }
+.rv:hover img { transform: scale(1.04); }
+.rv figcaption { position: absolute; inset: auto 0 0 0; padding: 28px 14px 12px; background: linear-gradient(transparent, rgb(0 0 0 / .72)); font-size: 14px; color: #fff; display: flex; justify-content: space-between; gap: 8px; align-items: end; }
+.rv figcaption span { font: 500 10.5px/1 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: #e9c27a; white-space: nowrap; }
+.rvs-nota { margin-top: 16px; font: 500 12px/1.5 var(--f-mono); color: #8d8476; }
+@media (max-width: 980px) { .rvs-red { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* ---------- v9: fondo de obra desvanecido y acabado moderno ---------- */
+html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+.fondo-obra { position: fixed; inset: 0; z-index: -1; pointer-events: none; background: url("img/fondo-obra.webp") center 65% / cover no-repeat; opacity: .17; filter: grayscale(.35) contrast(.95);
+  -webkit-mask-image: radial-gradient(120% 90% at 50% 70%, #000 30%, transparent 85%); mask-image: radial-gradient(120% 90% at 50% 70%, #000 30%, transparent 85%); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .fondo-obra { opacity: .2; filter: grayscale(.5) brightness(.8); } }
+:root[data-theme="dark"] .fondo-obra { opacity: .2; filter: grayscale(.5) brightness(.8); }
+.portada { isolation: isolate; }
+.portada-obra { position: absolute; inset: 0; z-index: -1; pointer-events: none; background: url("img/fondo-obra.webp") center 60% / cover no-repeat; opacity: .28; mix-blend-mode: luminosity;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 35%, #000 70%, transparent 100%); mask-image: linear-gradient(180deg, transparent 0%, #000 35%, #000 70%, transparent 100%); }
+/* barra superior de vidrio: aparece al dejar atrás la banda del logo */
+.barra-top { position: fixed; top: 12px; left: 50%; z-index: 45; transform: translate(-50%, -140%); width: min(1180px, calc(100% - 32px)); display: flex; align-items: center; gap: 18px;
+  padding: 10px 12px 10px 18px; border-radius: 16px; background: rgb(7 18 34 / .84); backdrop-filter: blur(16px) saturate(1.4); -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  border: 1px solid rgb(255 255 255 / .12); box-shadow: 0 18px 40px -20px rgb(0 0 0 / .6); transition: transform .5s cubic-bezier(.2, .8, .2, 1); color: #e9eef5; }
+.barra-top.ver { transform: translate(-50%, 0); }
+.barra-top .logo { display: flex; align-items: center; gap: 9px; text-decoration: none; color: #f3efe6; font: 800 17px/1 var(--f-display); letter-spacing: .14em; }
+.barra-top .logo svg { width: 22px; height: auto; color: #e9c27a; }
+.barra-top nav { display: flex; gap: 2px; margin-left: auto; }
+.barra-top nav a { color: #c9d5e3; text-decoration: none; font: 500 14px/1 var(--f-texto); padding: 9px 12px; border-radius: 10px; transition: background .2s, color .2s; }
+.barra-top nav a:hover, .barra-top nav a.activo { background: rgb(255 255 255 / .1); color: #fff; }
+.barra-top .boton { padding: 10px 14px; font-size: 14px; }
+@media (max-width: 860px) { .barra-top nav { display: none; } .barra-top .boton { margin-left: auto; } }
+/* tarjetas y ventanas más actuales */
+.ventana { border-radius: 14px; overflow: hidden; }
+.ficha { border-radius: 14px; overflow: hidden; background: color-mix(in srgb, var(--marco) 78%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.tarjeta { border-radius: 16px; background: color-mix(in srgb, var(--marco) 82%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); transition: transform .4s cubic-bezier(.2, .8, .2, 1), box-shadow .4s; }
+.tarjeta:hover { transform: translateY(-4px); }
+.paso .datos span, .mini { backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.rv, .dl-l { border-radius: 12px; }
+.chip-flota { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); background: color-mix(in srgb, var(--marco) 88%, transparent); }
+</style>
+</head>
+<body>
+
+
+<div class="fondo-obra" aria-hidden="true"></div>
+<header class="barra-top" id="barraTop" aria-label="Navegación">
+  <a class="logo" href="#inicio"><svg viewBox="0 0 100 116" aria-hidden="true"><path d="M8 4h38c30 0 46 22 46 54s-16 54-46 54H8z" fill="none" stroke="currentColor" stroke-width="9"/><path d="M26 22v72M42 22v72" stroke="currentColor" stroke-width="7"/></svg>DAMIAN</a>
+  <nav><a href="#caso">Caso de estudio</a><a href="#renders">Renders</a><a href="#damian-laminas">Láminas</a><a href="#laminas">Planos</a><a href="#modulos">Módulos</a></nav>
+  <a class="boton lleno" href="#caso">Ver el proyecto</a>
+</header>
+<section class="intro" id="intro" aria-label="DAMIAN: la D se arma con vigas y columnas doradas">
+  <div class="intro-caja">
+    <video id="introVideo" muted playsinline autoplay preload="auto" src="img/intro.mp4" aria-hidden="true"></video>
+    <svg class="dm-mark intro-d" viewBox="0 0 200 210" aria-hidden="true"><g fill="currentColor" fill-rule="evenodd"><path class="dm-ant" d="M58.2,0h1.6v12.5h-1.6Z"/><path class="dm-crown" d="M53,12h12v8.5h-12ZM46,20h26v10.5h-26Z"/><path class="dm-tower" d="M40,30h38v170h-38ZM44,34h4.5v5.5h-4.5ZM50,34h4.5v5.5h-4.5ZM50,42h4.5v5.5h-4.5ZM61,42h4.5v5.5h-4.5ZM67,42h4.5v5.5h-4.5ZM44,60h4.5v5.5h-4.5ZM50,60h4.5v5.5h-4.5ZM67,60h4.5v5.5h-4.5ZM44,69h4.5v5.5h-4.5ZM61,69h4.5v5.5h-4.5ZM67,69h4.5v5.5h-4.5ZM50,78h4.5v5.5h-4.5ZM61,78h4.5v5.5h-4.5ZM44,87h4.5v5.5h-4.5ZM50,87h4.5v5.5h-4.5ZM67,87h4.5v5.5h-4.5ZM44,96h4.5v5.5h-4.5ZM67,96h4.5v5.5h-4.5ZM44,105h4.5v5.5h-4.5ZM50,105h4.5v5.5h-4.5ZM61,105h4.5v5.5h-4.5ZM50,114h4.5v5.5h-4.5ZM61,114h4.5v5.5h-4.5ZM67,114h4.5v5.5h-4.5ZM44,123h4.5v5.5h-4.5ZM61,123h4.5v5.5h-4.5ZM67,123h4.5v5.5h-4.5ZM44,132h4.5v5.5h-4.5ZM50,132h4.5v5.5h-4.5ZM67,132h4.5v5.5h-4.5ZM50,141h4.5v5.5h-4.5ZM61,141h4.5v5.5h-4.5ZM44,150h4.5v5.5h-4.5ZM50,150h4.5v5.5h-4.5ZM61,150h4.5v5.5h-4.5ZM44,159h4.5v5.5h-4.5ZM61,159h4.5v5.5h-4.5ZM67,159h4.5v5.5h-4.5ZM50,168h4.5v5.5h-4.5ZM67,168h4.5v5.5h-4.5ZM44,177h4.5v5.5h-4.5ZM50,177h4.5v5.5h-4.5ZM67,177h4.5v5.5h-4.5ZM50,186h4.5v5.5h-4.5ZM61,186h4.5v5.5h-4.5ZM67,186h4.5v5.5h-4.5Z"/><path class="dm-st" d="M22,50h58v6.5h-58Z"/><path class="dm-sb" d="M22,193.5h60v6.5h-60Z"/><path class="dm-bowl" d="M78,50H112C162,50 194,82 194,125C194,168 162,200 112,200H78Z M86,57V193H110C138,193 156,164 156,125C156,86 138,57 110,57Z"/></g></svg>
+    <svg class="dm-word intro-w" viewBox="-3 -2 236 46" role="img" aria-label="DAMIAN"><g fill="none" stroke="currentColor" stroke-width="5.5" stroke-miterlimit="10"><path class="dm-l" style="--i:0" transform="translate(0,1)" d="M3,3V37H14C27,37 31,29 31,20C31,11 27,3 14,3Z" pathLength="1"/><path class="dm-l" style="--i:1" transform="translate(46,1)" d="M1,40L17,1L33,40" pathLength="1"/><path class="dm-l" style="--i:2" transform="translate(90,1)" d="M3,40V2L17,26L31,2V40" pathLength="1"/><path class="dm-l" style="--i:3" transform="translate(136,1)" d="M3,0V40" pathLength="1"/><path class="dm-l" style="--i:4" transform="translate(154,1)" d="M1,40L17,1L33,40" pathLength="1"/><path class="dm-l" style="--i:5" transform="translate(198,1)" d="M3,40V1.5L29,38.5V0" pathLength="1"/></g></svg>
+    <span class="intro-ley">Presupuestos y programación de obra</span>
+  </div>
+  <a class="bajar" href="#inicio">Ver el portafolio ↓</a>
+</section>
+<div class="avance-lectura" aria-hidden="true"></div>
+
+<header class="portada" id="inicio">
+  <div class="portada-obra" aria-hidden="true"></div>
+  <svg class="plano-fondo" viewBox="0 0 720 520" aria-hidden="true">
+    <rect class="d" x="60" y="60" width="560" height="380"/><line class="d" x1="60" y1="230" x2="400" y2="230"/><line class="d" x1="400" y1="60" x2="400" y2="440"/>
+    <line class="d" x1="250" y1="60" x2="250" y2="230"/><line class="d" x1="400" y1="300" x2="620" y2="300"/><path class="d" d="M200 230 a50 50 0 0 1 50 -50"/><path class="d" d="M400 360 a46 46 0 0 0 46 46"/>
+    <line class="d" x1="40" y1="480" x2="640" y2="480"/><line class="d" x1="60" y1="470" x2="60" y2="490"/><line class="d" x1="620" y1="470" x2="620" y2="490"/>
+    <circle class="n" cx="60" cy="24" r="12"/><circle class="n" cx="400" cy="24" r="12"/><circle class="n" cx="620" cy="24" r="12"/>
+  </svg>
+  <div class="env portada-in">
+    <div>
+      <div class="marca dm"><svg class="dm-mark m" viewBox="0 0 200 210" aria-hidden="true"><g fill="currentColor" fill-rule="evenodd"><path class="dm-ant" d="M58.2,0h1.6v12.5h-1.6Z"/><path class="dm-crown" d="M53,12h12v8.5h-12ZM46,20h26v10.5h-26Z"/><path class="dm-tower" d="M40,30h38v170h-38ZM44,34h4.5v5.5h-4.5ZM50,34h4.5v5.5h-4.5ZM50,42h4.5v5.5h-4.5ZM61,42h4.5v5.5h-4.5ZM67,42h4.5v5.5h-4.5ZM44,60h4.5v5.5h-4.5ZM50,60h4.5v5.5h-4.5ZM67,60h4.5v5.5h-4.5ZM44,69h4.5v5.5h-4.5ZM61,69h4.5v5.5h-4.5ZM67,69h4.5v5.5h-4.5ZM50,78h4.5v5.5h-4.5ZM61,78h4.5v5.5h-4.5ZM44,87h4.5v5.5h-4.5ZM50,87h4.5v5.5h-4.5ZM67,87h4.5v5.5h-4.5ZM44,96h4.5v5.5h-4.5ZM67,96h4.5v5.5h-4.5ZM44,105h4.5v5.5h-4.5ZM50,105h4.5v5.5h-4.5ZM61,105h4.5v5.5h-4.5ZM50,114h4.5v5.5h-4.5ZM61,114h4.5v5.5h-4.5ZM67,114h4.5v5.5h-4.5ZM44,123h4.5v5.5h-4.5ZM61,123h4.5v5.5h-4.5ZM67,123h4.5v5.5h-4.5ZM44,132h4.5v5.5h-4.5ZM50,132h4.5v5.5h-4.5ZM67,132h4.5v5.5h-4.5ZM50,141h4.5v5.5h-4.5ZM61,141h4.5v5.5h-4.5ZM44,150h4.5v5.5h-4.5ZM50,150h4.5v5.5h-4.5ZM61,150h4.5v5.5h-4.5ZM44,159h4.5v5.5h-4.5ZM61,159h4.5v5.5h-4.5ZM67,159h4.5v5.5h-4.5ZM50,168h4.5v5.5h-4.5ZM67,168h4.5v5.5h-4.5ZM44,177h4.5v5.5h-4.5ZM50,177h4.5v5.5h-4.5ZM67,177h4.5v5.5h-4.5ZM50,186h4.5v5.5h-4.5ZM61,186h4.5v5.5h-4.5ZM67,186h4.5v5.5h-4.5Z"/><path class="dm-st" d="M22,50h58v6.5h-58Z"/><path class="dm-sb" d="M22,193.5h60v6.5h-60Z"/><path class="dm-bowl" d="M78,50H112C162,50 194,82 194,125C194,168 162,200 112,200H78Z M86,57V193H110C138,193 156,164 156,125C156,86 138,57 110,57Z"/></g></svg><div><svg class="dm-word w" viewBox="-3 -2 236 46" role="img" aria-label="DAMIAN"><g fill="none" stroke="currentColor" stroke-width="5.5" stroke-miterlimit="10"><path class="dm-l" style="--i:0" transform="translate(0,1)" d="M3,3V37H14C27,37 31,29 31,20C31,11 27,3 14,3Z" pathLength="1"/><path class="dm-l" style="--i:1" transform="translate(46,1)" d="M1,40L17,1L33,40" pathLength="1"/><path class="dm-l" style="--i:2" transform="translate(90,1)" d="M3,40V2L17,26L31,2V40" pathLength="1"/><path class="dm-l" style="--i:3" transform="translate(136,1)" d="M3,0V40" pathLength="1"/><path class="dm-l" style="--i:4" transform="translate(154,1)" d="M1,40L17,1L33,40" pathLength="1"/><path class="dm-l" style="--i:5" transform="translate(198,1)" d="M3,40V1.5L29,38.5V0" pathLength="1"/></g></svg><small>Presupuestos y programación de obra</small></div></div>
+      <h1 class="titular"><span class="p">Diseña,</span> <span class="p">presupuesta</span> <span class="p">y</span> <span class="p"><em>construye</em></span> <span class="p">en una app.</span></h1>
+      <p class="bajada">Del programa de la casa al render, al juego de planos, al precio unitario y al avance de obra. <b>Todo lo de esta página lo hizo DAMIAN</b> con un proyecto creado desde cero.</p>
+      <div class="acciones"><a class="boton lleno" href="#caso">Ver el proyecto completo</a><a class="boton borde" href="#modulos">Recorrer los módulos</a></div>
+    </div>
+    <div class="render">
+      <figure data-tilt><img src="img/render.webp" alt="Render de la Casa Las Lomas, dos niveles, al atardecer, hecho en DAMIAN 3D Studio con modelos reales de la biblioteca" data-titulo="Casa Las Lomas · render al atardecer en 3D Studio"><figcaption>Casa Las Lomas · fachada principal · 18:15 h · DAMIAN 3D Studio</figcaption></figure>
+      <div class="chip-flota cf1"><span class="etq">Costo directo</span><b>$1,298,432</b>24 conceptos con matriz</div>
+      <div class="chip-flota cf2"><span class="etq">Juego de planos</span><b>17 láminas</b>A1 · escala 1:50</div>
+    </div>
+  </div>
+</header>
+
+<div class="cinta" aria-hidden="true"><div class="cinta-in">
+  <span>Plano arquitectónico</span><span>Instalaciones</span><span>Estructura</span><span>Modelo 3D</span><span>Render</span><span>DAMIAN Láminas</span><span>Precios unitarios</span><span>Explosión de insumos</span><span>Gantt</span><span>Ruta crítica</span><span>Curva S</span><span>Estimaciones</span><span>GeoBIM</span><span>Herramientas</span>
+  <span>Plano arquitectónico</span><span>Instalaciones</span><span>Estructura</span><span>Modelo 3D</span><span>Render</span><span>DAMIAN Láminas</span><span>Precios unitarios</span><span>Explosión de insumos</span><span>Gantt</span><span>Ruta crítica</span><span>Curva S</span><span>Estimaciones</span><span>GeoBIM</span><span>Herramientas</span>
+</div></div>
+
+<main>
+
+  <section class="env" id="caso">
+    <div class="caso-cab">
+      <div><p class="etq">Caso de estudio · hecho desde cero</p><h2>Casa Las Lomas, <span>de principio a fin.</span></h2></div>
+      <p>Una casa habitación de 140 m² con 3 recámaras, 2 baños y cochera. Se generó la planta, se le dieron instalaciones, estructura y materiales, se sacó el juego de planos y el render, y con eso se armó el presupuesto y el programa de obra. Cada imagen es una captura de DAMIAN.</p>
+    </div>
+    <div class="ficha aparece" aria-label="Ficha del proyecto">
+      <div><small>Superficie</small><b data-cuenta="140">140</b></div>
+      <div><small>Láminas</small><b data-cuenta="17">17</b></div>
+      <div><small>Conceptos</small><b data-cuenta="24">24</b></div>
+      <div><small>Costo directo</small><b data-cuenta="1298432" data-pre="$">$1,298,432</b></div>
+      <div><small>Precio de venta</small><b data-cuenta="1650094" data-pre="$">$1,650,094</b></div>
+      <div><small>Plazo</small><b>90.5 días</b></div>
+    </div>
+    <p class="nota-ilus">Proyecto de demostración. Los precios de los insumos son ilustrativos de 2026 para San Luis Potosí; no son una cotización.</p>
+
+    <div class="pasos">
+      <article class="paso">
+        <span class="num">01</span>
+        <div><p class="etq">Plano arquitectónico</p><h3>De un programa a una planta amueblada</h3>
+          <p>Se pidió una casa de 140 m² con 3 recámaras, 2 baños y un auto. DAMIAN propuso la planta y en un clic le puso cotas, ejes con globos, habitaciones, pisos, cuadros de puertas, ventanas y acabados, y la amuebló respetando el barrido de las puertas.</p>
+          <div class="datos"><span><b>28</b> muros</span><span><b>10</b> puertas</span><span><b>8</b> ventanas</span><span>cotas asociativas</span></div></div>
+        <div class="vis aparece"><div class="ventana"><div class="ventana-barra">Plano arquitectónico · Lienzo completo · Planta baja</div><img src="img/plano.webp" alt="Planta arquitectónica de la Casa Las Lomas con cotas, ejes, muebles y cuadros" data-titulo="Planta arquitectónica · Casa Las Lomas"></div></div>
+      </article>
+
+      <article class="paso">
+        <span class="num">02</span>
+        <div><p class="etq">Instalaciones y estructura</p><h3>Seis instalaciones y la estructura, sobre el mismo plano</h3>
+          <p>Agua fría y caliente, drenaje sanitario y pluvial, gas, eléctrica con cuadro de cargas y protección civil, cada una en su capa y con la norma citada. La estructura propone columnas, trabes y zapatas aisladas desde los muros.</p>
+          <div class="datos"><span>NOM-001-SEDE-2012</span><span>Reglamento de SLP</span><span>NOM-002-STPS</span></div>
+          <div class="tira-mini" data-grupo="g2"><button class="mini" type="button" aria-pressed="true" data-src="img/instalaciones.webp" data-t="Plano de instalaciones · todas las disciplinas">Instalaciones</button><button class="mini" type="button" aria-pressed="false" data-src="img/estructura.webp" data-t="Plano estructural · columnas, trabes y zapatas">Estructura</button></div></div>
+        <div class="vis aparece"><div class="ventana" data-vista="g2"><div class="ventana-barra">Plano de instalaciones · todas las disciplinas</div><img src="img/instalaciones.webp" alt="Plano de instalaciones de la casa" data-titulo="Plano de instalaciones"></div></div>
+      </article>
+
+      <article class="paso">
+        <span class="num">03</span>
+        <div><p class="etq">Modelo 3D y render</p><h3>El mismo dibujo se vuelve modelo y foto</h3>
+          <p>Casa contemporánea de dos niveles: abajo, ventanal de piso a techo detrás de una celosía de nogal, piedra laja y cochera de concreto aparente; arriba, un volumen forrado de madera que vuela 1.20 m sobre el acceso, con terraza sobre la cochera. Árboles, agaves, setos, el auto y los muebles son <b>modelos reales de la biblioteca 3D</b> de DAMIAN. <small style="display:block;margin-top:8px;opacity:.75">Esta versión agrega la planta alta (81 m²). El presupuesto y el juego de planos de los otros pasos corresponden a la versión de una planta.</small></p>
+          <div class="datos"><span><b>93</b> materiales con textura</span><span>GLB · OBJ · STL</span><span>hasta 4K</span></div>
+          <div class="tira-mini" data-grupo="g3"><button class="mini" type="button" aria-pressed="true" data-src="img/render.webp" data-t="3D Studio · fachada al atardecer">Atardecer</button><button class="mini" type="button" aria-pressed="false" data-src="img/render-noche.webp" data-t="3D Studio · de noche, con la celosía iluminada">Noche</button><button class="mini" type="button" aria-pressed="false" data-src="img/render-abierta.webp" data-t="3D Studio · vista abierta de la fachada">Vista abierta</button><button class="mini" type="button" aria-pressed="false" data-src="img/render-jardin.webp" data-t="3D Studio · jardín, terraza y pérgola">Jardín</button><button class="mini" type="button" aria-pressed="false" data-src="img/modelo-3d.webp" data-t="Plano arquitectónico · vista 3D">Vista 3D del plano</button></div></div>
+        <div class="vis aparece"><div class="ventana" data-vista="g3"><div class="ventana-barra">3D Studio · fachada al atardecer</div><img src="img/render.webp" alt="Render de la casa de dos niveles al atardecer: volumen de madera, celosía de nogal, piedra laja y auto" data-titulo="Casa Las Lomas · fachada al atardecer"></div></div>
+      </article>
+
+      <article class="paso">
+        <span class="num">04</span>
+        <div><p class="etq">Presupuesto</p><h3>Precios unitarios con matriz completa</h3>
+          <p>39 insumos, 10 cuadrillas, 2 básicos, 2 auxiliares y 24 matrices con mano de obra por rendimiento y herramienta al 3 %. La explosión de insumos ordena el costo con Pareto ABC y lo dibuja en un mapa por familia.</p>
+          <div class="datos"><span>CD <b>$1,298,432.14</b></span><span>Venta <b>$1,650,093.66</b></span><span>7 partidas</span></div>
+          <div class="tira-mini" data-grupo="g4"><button class="mini" type="button" aria-pressed="true" data-src="img/catalogo.webp" data-t="Conceptos compuestos · 7 partidas">Catálogo</button><button class="mini" type="button" aria-pressed="false" data-src="img/matrices.webp" data-t="Matrices de precios · análisis completo">Matriz</button><button class="mini" type="button" aria-pressed="false" data-src="img/graficas.webp" data-t="Explosión de insumos · Pareto ABC y mapa del costo">Explosión</button><button class="mini" type="button" aria-pressed="false" data-src="img/cuadrillas.webp" data-t="Cuadrillas · integrantes y costo por jornada">Cuadrillas</button></div></div>
+        <div class="vis aparece"><div class="ventana" data-vista="g4"><div class="ventana-barra">Conceptos compuestos · 7 partidas</div><img src="img/catalogo.webp" alt="Catálogo de conceptos de la casa por partidas" data-titulo="Catálogo de conceptos"></div></div>
+      </article>
+
+      <article class="paso">
+        <span class="num">05</span>
+        <div><p class="etq">Programa de obra</p><h3>Cada concepto, una actividad con cuadrilla</h3>
+          <p>El programa se liga a los conceptos: cantidad, rendimiento y cuadrilla dan la duración. La red tiene traslapes comienzo a comienzo, la ruta crítica sale sola y el riesgo de plazo se mide con PERT.</p>
+          <div class="barra-plazo"><div class="riel"><div class="lleno"></div></div><small><span>31 ago 2026</span><span>90.5 días hábiles</span><span>14 dic 2026</span></small></div>
+          <div class="tira-mini" data-grupo="g5"><button class="mini" type="button" aria-pressed="true" data-src="img/gantt.webp" data-t="Programa de obra (Gantt)">Gantt</button><button class="mini" type="button" aria-pressed="false" data-src="img/red.webp" data-t="Red y ruta crítica">Red</button><button class="mini" type="button" aria-pressed="false" data-src="img/manoobra.webp" data-t="Programa de mano de obra">Mano de obra</button><button class="mini" type="button" aria-pressed="false" data-src="img/pert.webp" data-t="Riesgo de plazo (PERT)">PERT</button></div></div>
+        <div class="vis aparece"><div class="ventana" data-vista="g5"><div class="ventana-barra">Programa de obra (Gantt)</div><img src="img/gantt.webp" alt="Gantt de la casa con partidas y ruta crítica" data-titulo="Programa de obra (Gantt)"></div></div>
+      </article>
+
+      <article class="paso">
+        <span class="num">06</span>
+        <div><p class="etq">Control de obra</p><h3>Avance real, curva S y expediente para entregar</h3>
+          <p>Con el avance a la fecha de corte, DAMIAN compara lo programado contra lo real, arma el plan a 6 semanas y deja el expediente listo con resumen, ruta crítica, cortes, mano de obra y firmas.</p>
+          <div class="datos"><span>corte <b>13 nov 2026</b></span><span>curva S</span><span>Last Planner</span></div>
+          <div class="tira-mini" data-grupo="g6"><button class="mini" type="button" aria-pressed="true" data-src="img/avance.webp" data-t="Avance y volúmenes excedentes · curva S">Curva S</button><button class="mini" type="button" aria-pressed="false" data-src="img/panel.webp" data-t="Panel ejecutivo">Panel</button><button class="mini" type="button" aria-pressed="false" data-src="img/seis-semanas.webp" data-t="Plan a 6 semanas">6 semanas</button><button class="mini" type="button" aria-pressed="false" data-src="img/expediente.webp" data-t="Expediente para entregar">Expediente</button></div></div>
+        <div class="vis aparece"><div class="ventana" data-vista="g6"><div class="ventana-barra">Avance y volúmenes excedentes · curva S</div><img src="img/avance.webp" alt="Curva S de avance programado contra real" data-titulo="Curva S"></div></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="env laminas" id="laminas">
+    <div class="laminas-cab">
+      <div><p class="etq">Salida a papel</p><h2>El juego de planos, listo para firmar</h2></div>
+      <p>17 láminas A1 salieron del mismo modelo: planta, cuatro fachadas, dos cortes, isométricos, estructura y seis instalaciones, con cajetín, cuadro de áreas y escala gráfica.</p>
+    </div>
+    <div class="muro">
+      <figure class="hoja"><img src="img/lam-a01.webp" alt="Lámina A-01, planta arquitectónica" data-titulo="A-01 · Planta arquitectónica · 1:50"><figcaption><b>A-01</b><span>Planta arquitectónica · 1:50</span></figcaption></figure>
+      <figure class="hoja"><img src="img/lam-a02.webp" alt="Lámina A-02, fachada frontal" data-titulo="A-02 · Fachada frontal · 1:50"><figcaption><b>A-02</b><span>Fachada frontal · 1:50</span></figcaption></figure>
+      <figure class="hoja"><img src="img/lam-a06.webp" alt="Lámina A-06, corte A-A'" data-titulo="A-06 · Corte A-A' · 1:50"><figcaption><b>A-06</b><span>Corte A-A' · 1:50</span></figcaption></figure>
+      <figure class="hoja"><img src="img/lam-a09.webp" alt="Lámina A-09, isométrico sin techo con mobiliario" data-titulo="A-09 · Isométrico sin techo, con mobiliario"><figcaption><b>A-09</b><span>Isométrico con mobiliario</span></figcaption></figure>
+      <figure class="hoja"><img src="img/lam-e01.webp" alt="Lámina E-01, planta estructural" data-titulo="E-01 · Planta estructural · 1:50"><figcaption><b>E-01</b><span>Planta estructural · 1:50</span></figcaption></figure>
+      <figure class="hoja"><img src="img/lam-ih01.webp" alt="Lámina IH-01, instalación hidráulica" data-titulo="IH-01 · Instalación hidráulica · 1:50"><figcaption><b>IH-01</b><span>Instalación hidráulica · 1:50</span></figcaption></figure>
+    </div>
+  </section>
+
+<section class="rvs" id="renders">
+  <div class="env">
+    <div class="rvs-cab">
+      <div><span class="dl-marca"><i></i>DAMIAN 3D Studio</span><h2>Renders de la Casa Las Lomas</h2></div>
+      <p>Nueve tomas del mismo modelo, de día, al atardecer y de noche, hechas en 3D Studio a 1920 × 1080. Los árboles, el auto y los muebles son modelos reales de la biblioteca 3D. Con estos renders se armaron las láminas de abajo.</p>
+    </div>
+    <div class="rvs-red"><figure class="rv aparece"><img src="img/rv-02.webp" alt="Vista 3/4 desde la derecha con el sol bajo detrás del árbol; terraza de la planta alta y cochera." data-titulo="3D Studio · Esquina al atardecer" loading="lazy"><figcaption>Esquina al atardecer<span>Atardecer</span></figcaption></figure><figure class="rv aparece"><img src="img/rv-01.webp" alt="Vista 3/4 desde la esquina izquierda: volumen alto con celosía de madera, jardín frontal y cochera." data-titulo="3D Studio · Fachada principal" loading="lazy"><figcaption>Fachada principal<span>Atardecer</span></figcaption></figure><figure class="rv aparece"><img src="img/rv-04.webp" alt="Detalle del acceso: puerta pivotante, celosía de madera, piedra y jardinera." data-titulo="3D Studio · Acceso y celosía" loading="lazy"><figcaption>Acceso y celosía<span>Atardecer</span></figcaption></figure><figure class="rv aparece"><img src="img/rv-11.webp" alt="Vista 3/4 izquierda con luz de mediodía." data-titulo="3D Studio · Fachada de día" loading="lazy"><figcaption>Fachada de día<span>Día</span></figcaption></figure><figure class="rv aparece"><img src="img/rv-10.webp" alt="Vista 3/4 derecha con luz de mediodía." data-titulo="3D Studio · Esquina de día" loading="lazy"><figcaption>Esquina de día<span>Día</span></figcaption></figure><figure class="rv aparece"><img src="img/rv-07.webp" alt="Interior de la planta baja mirando hacia la celosía del frente." data-titulo="3D Studio · Sala hacia la celosía" loading="lazy"><figcaption>Sala hacia la celosía<span>Atardecer</span></figcaption></figure><figure class="rv aparece"><img src="img/rv-08.webp" alt="Frente con las ventanas encendidas y la celosía iluminada desde dentro." data-titulo="3D Studio · Fachada de noche" loading="lazy"><figcaption>Fachada de noche<span>Noche</span></figcaption></figure><figure class="rv aparece"><img src="img/rv-06.webp" alt="Vista elevada del patio trasero con pérgola, terraza y árboles." data-titulo="3D Studio · Jardín posterior" loading="lazy"><figcaption>Jardín posterior<span>Atardecer</span></figcaption></figure><figure class="rv aparece"><img src="img/rv-12.webp" alt="Vista aérea 3/4 del lote con jardín, cochera y calle." data-titulo="3D Studio · Vista aérea" loading="lazy"><figcaption>Vista aérea<span>Día</span></figcaption></figure></div>
+    <p class="rvs-nota">Renders sin retoque, tal como salen de 3D Studio.</p>
+  </div>
+</section>
+
+<section class="dl" id="damian-laminas">
+  <div class="env">
+    <div class="dl-cab">
+      <div><span class="dl-marca"><i></i>DAMIAN Láminas</span><h2>Del render a la <em>lámina de concurso</em> en minutos.</h2></div>
+      <p>El editor de láminas y presentaciones de DAMIAN arma láminas de arquitectura listas para imprimir: retícula, tipografía, paleta y marcos de imagen ya resueltos. Se eligen la composición y el lenguaje gráfico, se sueltan los renders y todo queda editable. Estas seis se armaron en DAMIAN para la Casa Las Lomas con fotos realistas generadas con IA a partir de la descripción de la casa; los renders del modelo están arriba.</p>
+    </div>
+    <div class="dl-cifras">
+      <div><b data-cuenta="820">820</b><span>láminas e infografías de arquitectura</span></div>
+      <div><b data-cuenta="41">41</b><span>composiciones: concurso, póster, roll-up, mosaico, portafolio…</span></div>
+      <div><b data-cuenta="20">20</b><span>lenguajes gráficos con tipografía local</span></div>
+      <div><b>A1 · A0</b><span>y 90 × 60, roll-up, banner, mampara y muro de stand</span></div>
+    </div>
+    <div class="dl-muro">
+      <div class="dl-fila"><figure class="dl-l aparece" style="--ar:1.5"><img src="img/lam-ia0.webp" alt="Lámina de concurso horizontal con la casa al atardecer, planta y volúmenes" data-titulo="DAMIAN Láminas · Lámina de concurso · Concurso negro" loading="lazy"><figcaption>Lámina de concurso · Concurso negro</figcaption></figure><figure class="dl-l aparece" style="--ar:.6667"><img src="img/lam-ia1.webp" alt="Póster vertical con la fachada de la casa" data-titulo="DAMIAN Láminas · Póster · Brutalista concreto" loading="lazy"><figcaption>Póster · Brutalista concreto</figcaption></figure><figure class="dl-l aparece" style="--ar:.6667"><img src="img/lam-ia2.webp" alt="Lámina cinematográfica vertical con renders de día y de noche" data-titulo="DAMIAN Láminas · Cinematográfica · Lujo dorado" loading="lazy"><figcaption>Cinematográfica · Lujo dorado</figcaption></figure></div>
+      <div class="dl-fila"><figure class="dl-l aparece" style="--ar:1.5"><img src="img/lam-ia3.webp" alt="Mosaico de fotos con renders y datos del proyecto" data-titulo="DAMIAN Láminas · Mosaico de fotos · Editorial" loading="lazy"><figcaption>Mosaico de fotos · Editorial</figcaption></figure><figure class="dl-l aparece" style="--ar:1.4144"><img src="img/lam-ia5.webp" alt="Página de portafolio con vista principal, detalle e interior" data-titulo="DAMIAN Láminas · Portafolio · página de proyecto" loading="lazy"><figcaption>Portafolio · página de proyecto</figcaption></figure><figure class="dl-l aparece" style="--ar:.425"><img src="img/lam-ia4.webp" alt="Roll-up vertical con la casa y fotos en círculo" data-titulo="DAMIAN Láminas · Roll-up 85 × 200 · Nórdico" loading="lazy"><figcaption>Roll-up · Nórdico</figcaption></figure></div>
+    </div>
+    <div class="dl-editor">
+      <div class="ventana aparece"><div class="ventana-barra">Láminas y presentaciones · editor con plantillas de arquitectura</div><img src="img/lam-editor-ia.webp" alt="Editor de láminas de DAMIAN con la lámina cinematográfica de la casa y la galería de plantillas de arquitectura" data-titulo="DAMIAN Láminas · editor"></div>
+      <div>
+        <ul class="dl-lista">
+          <li><b>Plantilla → lámina</b>Elige composición y lenguaje; la retícula de 12 × 12 acomoda imagen dominante, textos y diagramas.</li>
+          <li><b>Todo editable</b>Textos, formas, iconos y marcos de imagen; capas, páginas, alinear y distribuir, como en un editor tipo Canva.</li>
+          <li><b>Sin datos inventados</b>Las cifras de muestra dicen «00» o «Por capturar» hasta que tú las llenas.</li>
+          <li><b>Sale a imprenta</b>PDF y PNG a la medida real, o PowerPoint para presentar.</li>
+        </ul>
+        <div class="dl-formatos"><span>90 × 60 cm</span><span>60 × 90 cm</span><span>A1</span><span>A0</span><span>Roll-up 85 × 200</span><span>Banner 60 × 160</span><span>Mampara 240 × 100</span><span>Muro de stand 300 × 230</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <section class="env modulos" id="modulos">
+    <p class="etq">Cinco espacios, una sola app</p>
+    <h2>Lo demás que trae DAMIAN</h2>
+    <div class="rejilla">
+      <article class="tarjeta ancha aparece"><img src="img/biblioteca.webp" alt="Biblioteca Técnica" data-titulo="Biblioteca Técnica · 26,579 fichas"><div><p class="etq">Presupuestos</p><h3>Biblioteca Técnica</h3><p>26,579 fichas de insumos, matrices y tabuladores públicos (SOBSE, SEINFRA Chiapas, ORFIS) por tipo de edificación, con vista previa.</p></div></article>
+      <article class="tarjeta aparece"><img src="img/insumos.webp" alt="Insumos" data-titulo="Materiales, personal y equipo"><div><p class="etq">Presupuestos</p><h3>Insumos</h3><p>Precio con y sin IVA, salario real con FSR e historial de cada cambio.</p></div></article>
+      <article class="tarjeta aparece"><img src="img/laminas.webp" alt="Estudio visual" data-titulo="Láminas y presentaciones"><div><p class="etq">Diseño</p><h3>Láminas y presentaciones</h3><p>820 composiciones de presentación y 66 estilos de lámina técnica.</p></div></article>
+      <article class="tarjeta aparece"><img src="img/geobim.webp" alt="GeoBIM" data-titulo="GeoBIM y georreferencia"><div><p class="etq">Diseño</p><h3>GeoBIM</h3><p>El modelo sobre el globo con la foto aérea del INEGI y el contexto urbano.</p></div></article>
+      <article class="tarjeta aparece"><img src="img/mesa.webp" alt="Mesa de secuenciación" data-titulo="Secuenciar · mesa tipo Visio"><div><p class="etq">Obra</p><h3>Mesa de secuenciación</h3><p>Conecta actividades en dos clics y ve el antes y después del CPM.</p></div></article>
+      <article class="tarjeta aparece"><img src="img/administrativo.webp" alt="Centro de trabajo" data-titulo="Centro de trabajo · Administrativo"><div><p class="etq">Administrativo</p><h3>Centro de trabajo</h3><p>Tareas, minutas con firmas, trámites de SLP y 139 formatos oficiales.</p></div></article>
+      <article class="tarjeta ancha aparece"><img src="img/herramientas.webp" alt="Herramientas" data-titulo="Panel de herramientas"><div><p class="etq">Herramientas</p><h3>Calculadoras de obra</h3><p>19 calculadoras con fórmula, unidades y procedimiento: cimbra, volúmenes, rendimientos y desperdicio real. Mandan sus cantidades al presupuesto.</p></div></article>
+    </div>
+    <div class="cifras" aria-label="DAMIAN en cifras">
+      <div class="cifra"><b data-cuenta="26579">26,579</b><span>fichas en la Biblioteca Técnica</span></div>
+      <div class="cifra"><b data-cuenta="1380">1,380</b><span>familias de mobiliario y equipo para los planos</span></div>
+      <div class="cifra"><b data-cuenta="93">93</b><span>materiales con foto, relieve y rugosidad</span></div>
+      <div class="cifra"><b>100/100</b><span>programas comprobados contra un CPM independiente</span></div>
+    </div>
+  </section>
+
+  <section class="cierre" id="reglas">
+    <div class="env cierre-in">
+      <div><p class="etq">Cómo trabaja</p><h2>Pendiente <span>≠</span> cero.</h2></div>
+      <div class="reglas">
+        <div><b>Sin inventar</b><span>No pone cantidades, precios ni rendimientos que no capturaste. Lo que falta queda pendiente y dice por qué.</span></div>
+        <div><b>Local</b><span>Funciona sin Internet; los datos de los proyectos no salen del equipo.</span></div>
+        <div><b>Con fuente</b><span>Cada norma se cita con artículo y página: RLOPSRM, NOM, reglamentos de SLP.</span></div>
+        <div><b>Probado</b><span>Miles de comprobaciones automáticas en el navegador antes de cada cambio.</span></div>
+      </div>
+    </div>
+    <div class="env pie"><span><svg class="dm-mark" viewBox="0 0 200 210" aria-hidden="true"><g fill="currentColor" fill-rule="evenodd"><path class="dm-ant" d="M58.2,0h1.6v12.5h-1.6Z"/><path class="dm-crown" d="M53,12h12v8.5h-12ZM46,20h26v10.5h-26Z"/><path class="dm-tower" d="M40,30h38v170h-38ZM44,34h4.5v5.5h-4.5ZM50,34h4.5v5.5h-4.5ZM50,42h4.5v5.5h-4.5ZM61,42h4.5v5.5h-4.5ZM67,42h4.5v5.5h-4.5ZM44,60h4.5v5.5h-4.5ZM50,60h4.5v5.5h-4.5ZM67,60h4.5v5.5h-4.5ZM44,69h4.5v5.5h-4.5ZM61,69h4.5v5.5h-4.5ZM67,69h4.5v5.5h-4.5ZM50,78h4.5v5.5h-4.5ZM61,78h4.5v5.5h-4.5ZM44,87h4.5v5.5h-4.5ZM50,87h4.5v5.5h-4.5ZM67,87h4.5v5.5h-4.5ZM44,96h4.5v5.5h-4.5ZM67,96h4.5v5.5h-4.5ZM44,105h4.5v5.5h-4.5ZM50,105h4.5v5.5h-4.5ZM61,105h4.5v5.5h-4.5ZM50,114h4.5v5.5h-4.5ZM61,114h4.5v5.5h-4.5ZM67,114h4.5v5.5h-4.5ZM44,123h4.5v5.5h-4.5ZM61,123h4.5v5.5h-4.5ZM67,123h4.5v5.5h-4.5ZM44,132h4.5v5.5h-4.5ZM50,132h4.5v5.5h-4.5ZM67,132h4.5v5.5h-4.5ZM50,141h4.5v5.5h-4.5ZM61,141h4.5v5.5h-4.5ZM44,150h4.5v5.5h-4.5ZM50,150h4.5v5.5h-4.5ZM61,150h4.5v5.5h-4.5ZM44,159h4.5v5.5h-4.5ZM61,159h4.5v5.5h-4.5ZM67,159h4.5v5.5h-4.5ZM50,168h4.5v5.5h-4.5ZM67,168h4.5v5.5h-4.5ZM44,177h4.5v5.5h-4.5ZM50,177h4.5v5.5h-4.5ZM67,177h4.5v5.5h-4.5ZM50,186h4.5v5.5h-4.5ZM61,186h4.5v5.5h-4.5ZM67,186h4.5v5.5h-4.5Z"/><path class="dm-st" d="M22,50h58v6.5h-58Z"/><path class="dm-sb" d="M22,193.5h60v6.5h-60Z"/><path class="dm-bowl" d="M78,50H112C162,50 194,82 194,125C194,168 162,200 112,200H78Z M86,57V193H110C138,193 156,164 156,125C156,86 138,57 110,57Z"/></g></svg>DAMIAN · presupuestos y programación de obra</span><span>Capturas de la aplicación real · 2026-11-13 · <button class="repetir-intro" type="button" id="verIntro">Ver el logo otra vez</button></span></div>
+  </section>
+</main>
+
+<div class="visor" id="visor" hidden role="dialog" aria-modal="true" aria-label="Imagen ampliada">
+  <button type="button" id="visorCerrar">Cerrar ✕</button>
+  <figure style="margin:0"><img id="visorImg" alt=""><p id="visorTxt"></p></figure>
+</div>
+
+<script>
+(() => {
+  const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // miniaturas: cambian la captura con un fundido
+  document.querySelectorAll('.tira-mini').forEach((t) => {
+    const v = document.querySelector(`[data-vista="${t.dataset.grupo}"]`), img = v.querySelector('img'), barra = v.querySelector('.ventana-barra');
+    t.querySelectorAll('.mini').forEach((m) => m.addEventListener('click', () => {
+      t.querySelectorAll('.mini').forEach((x) => x.setAttribute('aria-pressed', String(x === m)));
+      const poner = () => { img.src = m.dataset.src; img.dataset.titulo = m.dataset.t; barra.textContent = m.dataset.t; img.style.opacity = 1; };
+      if (quieto) return poner();
+      img.style.opacity = 0; setTimeout(poner, 220);
+    }));
+  });
+  // inclinación suave del render con el puntero
+  const f = document.querySelector('[data-tilt]');
+  if (f && !quieto) {
+    const caja = f.parentElement;
+    caja.addEventListener('pointermove', (e) => { const r = caja.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5; f.style.transform = `rotateY(${x * 7}deg) rotateX(${-y * 6}deg)`; });
+    caja.addEventListener('pointerleave', () => { f.style.transform = ''; });
+  }
+  // cifras que cuentan al aparecer (en reposo ya muestran su valor)
+  const fmt = (n) => n.toLocaleString('es-MX');
+  if (!quieto && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver((es) => es.forEach((e) => {
+      if (!e.isIntersecting) return; io.unobserve(e.target);
+      const el = e.target, fin = +el.dataset.cuenta, pre = el.dataset.pre || '', t0 = performance.now(), dur = 1400;
+      const paso = (t) => { const k = Math.min(1, (t - t0) / dur), v = Math.round(fin * (1 - Math.pow(1 - k, 3))); el.textContent = pre + fmt(v); if (k < 1) requestAnimationFrame(paso); };
+      requestAnimationFrame(paso);
+    }), { threshold: .6 });
+    document.querySelectorAll('[data-cuenta]').forEach((el) => io.observe(el));
+  }
+
+
+  // banda inicial en bucle: el video arma la D; al terminar, la D vectorial queda encima, se escribe DAMIAN y vuelve a empezar
+  const intro = document.getElementById('intro'), vid = document.getElementById('introVideo');
+  let visible = true, tFin = 0, tSale = 0;
+  const jugar = () => { const pr = vid.play(); if (pr && pr.catch) pr.catch(() => intro.classList.add('final')); };
+  const otraVez = () => { intro.classList.add('sale'); tSale = setTimeout(() => { intro.classList.remove('final', 'sale'); try { vid.currentTime = 0; } catch {} if (visible) jugar(); }, 650); };
+  vid.addEventListener('ended', () => { intro.classList.add('final'); tFin = setTimeout(otraVez, 3200); });
+  vid.addEventListener('error', () => intro.classList.add('final'));
+  if (quieto) { vid.removeAttribute('autoplay'); vid.pause(); intro.classList.add('final'); }
+  else if ('IntersectionObserver' in window) new IntersectionObserver((es) => { visible = es[0].isIntersecting; if (!visible) vid.pause(); else if (!intro.classList.contains('final') && vid.paused) jugar(); }, { threshold: .2 }).observe(intro);
+  document.getElementById('verIntro')?.addEventListener('click', () => scrollTo({ top: 0 }));
+
+  // barra superior: aparece al pasar la banda del logo; marca la sección visible
+  (() => { const b = document.getElementById('barraTop'), intro = document.getElementById('intro'); if (!b) return;
+    const ver = () => b.classList.toggle('ver', !intro || intro.getBoundingClientRect().bottom < 80); addEventListener('scroll', ver, { passive: true }); ver();
+    const links = [...b.querySelectorAll('nav a')];
+    if ('IntersectionObserver' in window) { const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) links.forEach((a) => a.classList.toggle('activo', a.getAttribute('href') === '#' + e.target.id)); }), { rootMargin: '-45% 0px -50% 0px' });
+      links.forEach((a) => { const s = document.querySelector(a.getAttribute('href')); if (s) io.observe(s); }); } })();
+  // visor a pantalla completa
+  const visor = document.getElementById('visor'), vi = document.getElementById('visorImg'), vt = document.getElementById('visorTxt');
+  let antes = null;
+  const cerrar = () => { visor.hidden = true; antes?.focus?.(); };
+  document.addEventListener('click', (e) => {
+    const im = e.target.closest('.ventana img, .hoja, .tarjeta img, .render img, .cuadro, .dl-l, .rv');
+    if (!im) return;
+    const img = im.tagName === 'IMG' ? im : im.querySelector('img');
+    antes = document.activeElement; vi.src = img.src; vi.alt = img.alt; vt.textContent = img.dataset.titulo || img.alt; visor.hidden = false; document.getElementById('visorCerrar').focus();
+  });
+  visor.addEventListener('click', (e) => { if (e.target === visor || e.target.id === 'visorCerrar') cerrar(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !visor.hidden) cerrar(); });
+})();
+</script>
+
+</body>
+</html>
