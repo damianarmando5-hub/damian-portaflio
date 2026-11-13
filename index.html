@@ -668,6 +668,37 @@ h2 em .wi, h2 .acento .wi { animation: none !important; background-position: 30%
   .mx-media .flota { animation: flotaSube linear both; animation-timeline: view(); animation-range: entry 10% cover 60%; }
   @keyframes flotaSube { from { translate: 0 60px; rotate: 3deg; } to { translate: 0 0; rotate: 0deg; } }
 } }
+
+/* ---------- v17: videos cortos de la app ---------- */
+.vids { padding-block: 96px 24px; }
+.vids-cab { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .9fr); gap: 40px; align-items: end; margin-bottom: 36px; }
+.vids-cab h2 { font: 900 clamp(36px, 5vw, 64px)/.98 var(--f-display); font-stretch: 112%; color: #f2f2f2; margin-top: 10px; }
+.vids-cab p { color: #a6a6a6; max-width: 52ch; }
+.vids-red { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+.vid { margin: 0; cursor: pointer; border-radius: 16px; background: #0d0d0d; border: 1px solid #1f1f1f; overflow: hidden; transition: transform .5s cubic-bezier(.2, .8, .2, 1), border-color .3s, box-shadow .5s; outline: none; }
+.vid:hover, .vid:focus-visible { transform: translateY(-6px); border-color: #3a3a3a; box-shadow: 0 50px 90px -40px #000, 0 0 0 1px rgb(255 255 255 / .18); }
+.vid:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.vid-pant { position: relative; display: block; aspect-ratio: 16 / 9; background: #000; overflow: hidden; }
+.vid-pant video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.vid-dur { position: absolute; right: 10px; bottom: 10px; font: 500 11px/1 var(--f-mono); letter-spacing: .08em; color: #fff; background: rgb(0 0 0 / .72); padding: 6px 8px; border-radius: 999px; }
+.vid-real { position: absolute; left: 10px; top: 10px; display: inline-flex; align-items: center; gap: 6px; font: 600 10px/1 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: #000; background: #f0f0f0; padding: 5px 8px; border-radius: 999px; }
+.vid-real::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #d11; }
+.vid-play { position: absolute; left: 50%; top: 50%; width: 64px; height: 64px; margin: -32px 0 0 -32px; border-radius: 50%; display: grid; place-items: center; background: rgb(255 255 255 / .92); color: #000; font-size: 22px; padding-left: 4px; opacity: 0; transform: scale(.8); transition: opacity .3s, transform .4s cubic-bezier(.2, .8, .2, 1); box-shadow: 0 10px 30px rgb(0 0 0 / .5); }
+.vid:hover .vid-play, .vid:focus-visible .vid-play { opacity: 1; transform: none; }
+.vid-txt { display: block; padding: 16px 18px 20px; }
+.vid-txt b { display: block; margin: 6px 0 6px; font: 800 22px/1.15 var(--f-display); color: #f2f2f2; }
+.vid-txt span:last-child { display: block; font-size: 14.5px; line-height: 1.5; color: #9d9d9d; }
+.vid-txt .etq { font-size: 11px; }
+.vvisor[hidden] { display: none !important; }
+.vvisor { position: fixed; inset: 0; z-index: 55; background: rgb(0 0 0 / .94); display: grid; place-items: center; padding: 56px 16px 24px; }
+.vvisor figure { margin: 0; width: min(1280px, 100%); }
+.vvisor video { display: block; width: 100%; max-height: 80vh; background: #000; border-radius: 10px; box-shadow: 0 30px 80px rgb(0 0 0 / .6); }
+.vvisor p { color: #d8d8d8; font: 500 13px/1.4 var(--f-mono); margin-top: 12px; text-align: center; }
+.vvisor button { position: absolute; top: 14px; right: 16px; font: 600 14px/1 var(--f-texto); color: #fff; background: rgb(255 255 255 / .12); border: 1px solid rgb(255 255 255 / .3); padding: 10px 14px; border-radius: 999px; cursor: pointer; }
+@media (max-width: 860px) { .vids-cab, .vids-red { grid-template-columns: minmax(0, 1fr); } }
+@media (prefers-reduced-motion: no-preference) { @supports (animation-timeline: view()) {
+  .vid { animation: subeLigero linear both; animation-timeline: view(); animation-range: entry 0% cover 22%; }
+} }
 </style>
 </head>
 <body>
@@ -700,7 +731,7 @@ h2 em .wi, h2 .acento .wi { animation: none !important; background-position: 30%
 <div class="aurora" aria-hidden="true"></div>
 <header class="barra-top" id="barraTop" aria-label="Navegación">
   <a class="logo" href="#inicio"><img src="img/favicon.png" alt="" width="30" height="30">DAMIAN</a>
-  <nav><a href="#caso">Caso de estudio</a><a href="#renders">Renders</a><a href="#damian-laminas">Láminas</a><a href="#laminas">Planos</a><a href="#herramientas">Topografía</a><a href="#compatibilidad">Archivos</a><a href="#modulos">Módulos</a></nav>
+  <nav><a href="#videos">Videos</a><a href="#caso">Caso de estudio</a><a href="#renders">Renders</a><a href="#damian-laminas">Láminas</a><a href="#laminas">Planos</a><a href="#herramientas">Topografía</a><a href="#compatibilidad">Archivos</a><a href="#modulos">Módulos</a></nav>
   <a class="boton lleno" href="#caso">Ver el proyecto</a>
 </header>
 <section class="intro" id="intro" aria-label="DAMIAN: la D se arma con vigas y columnas doradas">
@@ -743,6 +774,23 @@ h2 em .wi, h2 .acento .wi { animation: none !important; background-position: 30%
 </div></div>
 
 <main>
+
+  <section class="env vids" id="videos">
+    <div class="vids-cab">
+      <div><p class="etq">DAMIAN en acción · videos cortos</p><h2>Míralo trabajar, sin cortes.</h2></div>
+      <p>Grabaciones de pantalla de la app real, a velocidad normal: una casita que sale de cero, un organigrama que se arma puesto por puesto, un render que se retoca y la galería de plantillas. Corren solos y sin sonido; tócalos para verlos en grande.</p>
+    </div>
+    <div class="vids-red">
+      <figure class="vid" tabindex="0" role="button" aria-label="Ver en grande: una casita desde cero" data-t="Plano arquitectónico · una casita desde cero"><span class="vid-pant"><video muted loop playsinline preload="none" poster="img/v-casita.webp" data-src="img/v-casita.mp4" aria-hidden="true"></video><span class="vid-real">Grabación real</span><span class="vid-dur">0:35</span><span class="vid-play" aria-hidden="true">▶</span></span>
+        <figcaption class="vid-txt"><span class="etq">Plano arquitectónico</span><b>Una casita desde cero</b><span>Proyecto nuevo, seis propuestas de planta para elegir, anteproyecto en un clic con losas, columnas y eléctrica, y la casa en 3D.</span></figcaption></figure>
+      <figure class="vid" tabindex="0" role="button" aria-label="Ver en grande: organigrama de obra" data-t="Organigrama de obra · puesto por puesto"><span class="vid-pant"><video muted loop playsinline preload="none" poster="img/v-organigrama.webp" data-src="img/v-organigrama.mp4" aria-hidden="true"></video><span class="vid-real">Grabación real</span><span class="vid-dur">0:41</span><span class="vid-play" aria-hidden="true">▶</span></span>
+        <figcaption class="vid-txt"><span class="etq">Organigrama de obra</span><b>Del director a la cuadrilla</b><span>Desde la Dirección General se agregan gerencias, residente, cabo y cuadrilla; cada puesto con su perfil y su nivel por color.</span></figcaption></figure>
+      <figure class="vid" tabindex="0" role="button" aria-label="Ver en grande: editar una foto en Studio Pro" data-t="DAMIAN Studio Pro · editar un render"><span class="vid-pant"><video muted loop playsinline preload="none" poster="img/v-foto.webp" data-src="img/v-foto.mp4" aria-hidden="true"></video><span class="vid-real">Grabación real</span><span class="vid-dur">0:29</span><span class="vid-play" aria-hidden="true">▶</span></span>
+        <figcaption class="vid-txt"><span class="etq">DAMIAN Studio Pro</span><b>Retocar un render</b><span>Presets, exposición y contraste, mezcla de color y antes / después sobre el render de la casa. El original no se toca.</span></figcaption></figure>
+      <figure class="vid" tabindex="0" role="button" aria-label="Ver en grande: galería de plantillas" data-t="Láminas y presentaciones · galería de plantillas"><span class="vid-pant"><video muted loop playsinline preload="none" poster="img/v-plantillas.webp" data-src="img/v-plantillas.mp4" aria-hidden="true"></video><span class="vid-real">Grabación real</span><span class="vid-dur">0:21</span><span class="vid-play" aria-hidden="true">▶</span></span>
+        <figcaption class="vid-txt"><span class="etq">Láminas y presentaciones</span><b>4,246 plantillas a la mano</b><span>Se recorre la galería, se filtra por categoría, se busca «portafolio» y la plantilla se abre lista para editar.</span></figcaption></figure>
+    </div>
+  </section>
 
   <section class="env" id="caso">
     <div class="caso-cab">
@@ -1157,6 +1205,28 @@ h2 em .wi, h2 .acento .wi { animation: none !important; background-position: 30%
   });
   visor.addEventListener('click', (e) => { if (e.target === visor || e.target.id === 'visorCerrar') cerrar(); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !visor.hidden) cerrar(); });
+})();
+</script>
+<div class="vvisor" id="vvisor" hidden role="dialog" aria-modal="true" aria-label="Video ampliado">
+  <button type="button" id="vvisorCerrar">Cerrar ✕</button>
+  <figure><video id="vvisorVid" controls playsinline muted></video><p id="vvisorTxt"></p></figure>
+</div>
+<script>
+// v17: videos cortos: se cargan al acercarse, corren solos mientras se ven y se abren en grande con controles
+(() => { const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const tarjetas = [...document.querySelectorAll('.vid')], vids = tarjetas.map((t) => t.querySelector('video'));
+  const cargar = (v) => { if (!v.getAttribute('src')) { v.preload = 'auto'; v.src = v.dataset.src; } };
+  if ('IntersectionObserver' in window) {
+    const cerca = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { cargar(e.target); cerca.unobserve(e.target); } }), { rootMargin: '500px 0px' });
+    vids.forEach((v) => cerca.observe(v));
+    if (!quieto) { const io = new IntersectionObserver((es) => es.forEach((e) => { const v = e.target; if (e.isIntersecting && e.intersectionRatio >= .5) { cargar(v); v.play().catch(() => {}); } else v.pause(); }), { threshold: [0, .5] }); vids.forEach((v) => io.observe(v)); }
+  } else vids.forEach(cargar);
+  const vv = document.getElementById('vvisor'), vvv = document.getElementById('vvisorVid'), vvt = document.getElementById('vvisorTxt'); let antes = null;
+  const abrir = (t) => { antes = t; vvv.src = t.querySelector('video').dataset.src; vvt.textContent = t.dataset.t || ''; vv.hidden = false; vvv.play().catch(() => {}); document.getElementById('vvisorCerrar').focus(); };
+  const cerrar = () => { vvv.pause(); vv.hidden = true; antes?.focus?.(); };
+  tarjetas.forEach((t) => { t.addEventListener('click', () => abrir(t)); t.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); abrir(t); } }); });
+  vv.addEventListener('click', (e) => { if (e.target === vv || e.target.id === 'vvisorCerrar') cerrar(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !vv.hidden) cerrar(); });
 })();
 </script>
 
