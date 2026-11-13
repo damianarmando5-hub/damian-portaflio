@@ -498,16 +498,43 @@ img.captura { filter: grayscale(1) contrast(1.05) !important; transition: filter
 .ventana[data-vista] .flechas button { all: unset; cursor: pointer; width: 34px; height: 34px; display: grid; place-items: center; border-radius: 50%; background: rgb(0 0 0 / .55); backdrop-filter: blur(8px); color: #fff; font: 600 15px/1 var(--f-texto); border: 1px solid rgb(255 255 255 / .2); transition: background .2s; }
 .ventana[data-vista] .flechas button:hover { background: rgb(255 255 255 / .9); color: #000; }
 .ventana[data-vista] .contador { position: absolute; left: 12px; bottom: 14px; z-index: 2; font: 500 11px/1 var(--f-mono); letter-spacing: .14em; color: #fff; background: rgb(0 0 0 / .55); padding: 7px 9px; border-radius: 999px; backdrop-filter: blur(8px); }
+
+/* ---------- v13: más movimiento ---------- */
+.musica.espera { border-color: rgb(255 255 255 / .45); }
+.franja { position: relative; overflow: hidden; padding-block: 34px; border-block: 1px solid #1c1c1c; background: #030303; }
+.franja-pista { display: flex; gap: 48px; white-space: nowrap; width: max-content; font: 900 clamp(48px, 9vw, 140px)/1 var(--f-display); font-stretch: 125%; letter-spacing: -.01em; text-transform: uppercase;
+  color: transparent; -webkit-text-stroke: 1px rgb(255 255 255 / .28); will-change: transform; }
+.franja-pista b { color: #f2f2f2; -webkit-text-stroke: 0; }
+.franja-pista span { display: inline-flex; align-items: center; gap: 48px; }
+.franja-pista span::after { content: ""; width: .32em; height: .32em; border-radius: 50%; background: rgb(255 255 255 / .5); }
+.inclina { transform-style: preserve-3d; will-change: transform; }
+.brilla { position: absolute; inset: 0; pointer-events: none; border-radius: inherit; z-index: 3; background: radial-gradient(600px circle at var(--gx, 50%) var(--gy, 50%), rgb(255 255 255 / .16), transparent 45%); opacity: 0; transition: opacity .3s; }
+.inclina:hover .brilla { opacity: 1; }
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .rv img, .dl-l img, .ventana img, .hoja img { animation: acerca linear both; animation-timeline: view(); animation-range: entry 0% exit 100%; }
+    @keyframes acerca { from { scale: 1.14; } to { scale: 1; } }
+    .paso .num { animation: latido 2.8s ease-in-out infinite, giraNum linear both !important; animation-timeline: auto, view() !important; animation-range: normal, entry 0% cover 40% !important; }
+    @keyframes giraNum { from { rotate: -180deg; scale: .4; opacity: 0; } to { rotate: 0deg; scale: 1; opacity: 1; } }
+    .pasos::before { transform-origin: top; animation: crece linear both; animation-timeline: view(); animation-range: entry 0% exit 60%; }
+    @keyframes crece { from { scale: 1 0; } to { scale: 1 1; } }
+    .datos span, .dl-formatos span, .dl-cifras div { animation: sube linear both; animation-timeline: view(); animation-range: entry 0% cover 25%; }
+    @keyframes sube { from { opacity: 0; translate: 0 24px; filter: blur(6px); } to { opacity: 1; translate: 0 0; filter: none; } }
+  }
+  .portada .render { animation: subir 1.1s cubic-bezier(.2, .8, .2, 1) .3s both, flota 7s ease-in-out 1.4s infinite alternate; }
+  @keyframes flota { to { translate: 0 -10px; } }
+  .musica.espera { animation: llama 1.8s ease-in-out infinite; }
+  @keyframes llama { 50% { box-shadow: 0 0 0 8px rgb(255 255 255 / .08); } }
+}
 </style>
 </head>
 <body>
 
 
-<div class="carga" id="carga" aria-hidden="true"><div class="carga-caja"><img src="img/favicon.png" alt=""><span class="carga-nombre">DAMIAN</span><span class="carga-linea"><i id="cargaBarra"></i></span><span class="carga-num" id="cargaNum">000</span></div></div>
 <div class="grano" aria-hidden="true"></div>
 <div class="anillo" id="anillo" aria-hidden="true"></div>
-<button class="musica" id="musica" type="button" aria-pressed="true" aria-label="Silenciar música"><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span id="musicaTxt">Sonando</span></button>
-<audio id="pista" src="img/musica.mp4" loop preload="auto" autoplay></audio>
+<button class="musica espera" id="musica" type="button" aria-pressed="false" aria-label="Activar música"><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span id="musicaTxt">Toca para escuchar</span></button>
+<audio id="pista" src="img/musica.mp4" loop preload="auto"></audio>
 <div class="fondo-obra" aria-hidden="true"></div>
 <div class="aurora" aria-hidden="true"></div>
 <header class="barra-top" id="barraTop" aria-label="Navegación">
@@ -641,6 +668,8 @@ img.captura { filter: grayscale(1) contrast(1.05) !important; transition: filter
       <figure class="hoja"><img src="img/lam-ih01.webp" alt="Lámina IH-01, instalación hidráulica" data-titulo="IH-01 · Instalación hidráulica · 1:50"><figcaption><b>IH-01</b><span>Instalación hidráulica · 1:50</span></figcaption></figure>
     </div>
   </section>
+
+<div class="franja" aria-hidden="true"><div class="franja-pista" id="franja"><span><b>Diseña</b></span><span>Presupuesta</span><span><b>Construye</b></span><span>Renderiza</span><span><b>Presenta</b></span><span>Diseña</span><span><b>Presupuesta</b></span><span>Construye</span><span><b>Renderiza</b></span><span>Presenta</span></div></div>
 
 <section class="rvs" id="renders">
   <div class="env">
@@ -785,12 +814,6 @@ img.captura { filter: grayscale(1) contrast(1.05) !important; transition: filter
 
   // v11: pantalla de carga, titulares con máscara, cursor, botones magnéticos y música
   (() => { const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    // carga: cuenta hasta 100 y se recoge hacia arriba
-    const c = document.getElementById('carga');
-    if (c) { if (quieto) c.remove(); else { const n = document.getElementById('cargaNum'), bar = document.getElementById('cargaBarra'), t0 = performance.now(), dur = 1300;
-      const paso = (t) => { const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3); n.textContent = String(Math.round(e * 100)).padStart(3, '0'); bar.style.width = (e * 100) + '%';
-        if (k < 1) requestAnimationFrame(paso); else { c.classList.add('fuera'); setTimeout(() => c.remove(), 1200); } };
-      requestAnimationFrame(paso); } }
     // titulares de sección: cada palabra sube desde una máscara al verse
     let j = 0; const envolver = (n) => [...n.childNodes].forEach((ch) => { if (ch.nodeType === 3) { const f = document.createDocumentFragment();
         ch.textContent.split(/(\s+)/).forEach((w) => { if (!w.trim()) f.append(w); else { const a = document.createElement('span'), b = document.createElement('span'); a.className = 'w'; b.className = 'wi'; b.style.setProperty('--i', j++); b.textContent = w; a.append(b); f.append(a); } }); ch.replaceWith(f); }
@@ -809,19 +832,24 @@ img.captura { filter: grayscale(1) contrast(1.05) !important; transition: filter
     if (!quieto && matchMedia('(pointer: fine)').matches) document.querySelectorAll('.boton, .musica').forEach((b) => {
       b.addEventListener('pointermove', (e) => { const r = b.getBoundingClientRect(); b.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * .25}px, ${(e.clientY - r.top - r.height / 2) * .35}px)`; });
       b.addEventListener('pointerleave', () => { b.style.transform = ''; }); b.style.transition = 'transform .4s cubic-bezier(.2, .8, .2, 1)'; });
-    // música: siempre activa y bajita; si el navegador no deja sonar sin un gesto, arranca con el primer toque, clic o tecla
+    // música: activa por omisión y bajita. El navegador solo deja sonar después de un gesto (clic, tecla, toque soltado),
+    // así que se intenta al abrir y en cada gesto hasta que suena; el botón dice «Toca para escuchar» mientras tanto
     const mb = document.getElementById('musica'), pista = document.getElementById('pista'), txt = document.getElementById('musicaTxt'), BAJO = .14; let fade = 0;
     let apagada = false; try { apagada = localStorage.getItem('damian-musica') === 'no'; } catch {}
     const volumen = (meta, fin) => { clearInterval(fade); fade = setInterval(() => { const v = pista.volume + (meta > pista.volume ? .02 : -.02);
       if ((meta > pista.volume && v >= meta) || (meta <= pista.volume && v <= meta)) { pista.volume = meta; clearInterval(fade); fin && fin(); } else pista.volume = Math.max(0, Math.min(1, v)); }, 60); };
-    const pintar = (on) => { mb.setAttribute('aria-pressed', String(on)); mb.setAttribute('aria-label', on ? 'Silenciar música' : 'Activar música'); txt.textContent = on ? 'Sonando' : 'Sin sonido'; };
-    const sonar = () => { pista.volume = 0; return pista.play().then(() => { volumen(BAJO); return true; }).catch(() => false); };
-    const gestos = ['pointerdown', 'keydown', 'touchstart'];
-    const alPrimerGesto = (e) => { if (e.target.closest?.('#musica')) return; gestos.forEach((g) => removeEventListener(g, alPrimerGesto, true)); if (!apagada) sonar(); };
-    pista.pause(); pista.volume = 0;
-    if (apagada) pintar(false); else { pintar(true); sonar().then((ok) => { if (!ok) gestos.forEach((g) => addEventListener(g, alPrimerGesto, true)); }); }
-    mb?.addEventListener('click', () => { apagada = mb.getAttribute('aria-pressed') === 'true'; try { localStorage.setItem('damian-musica', apagada ? 'no' : 'si'); } catch {}
-      pintar(!apagada); if (apagada) volumen(0, () => pista.pause()); else sonar(); });
+    const pintar = () => { const suena = !pista.paused && !apagada; mb.setAttribute('aria-pressed', String(suena)); mb.setAttribute('aria-label', suena ? 'Silenciar música' : 'Activar música');
+      txt.textContent = apagada ? 'Sin sonido' : (suena ? 'Sonando' : 'Toca para escuchar'); mb.classList.toggle('espera', !apagada && !suena); };
+    const sonar = () => { if (!pista.paused) return Promise.resolve(true); pista.volume = 0; return pista.play().then(() => { volumen(BAJO); pintar(); return true; }).catch(() => { pintar(); return false; }); };
+    const gestos = ['click', 'keydown', 'touchend', 'pointerup'];
+    const quitar = () => gestos.forEach((g) => removeEventListener(g, alGesto, true));
+    function alGesto(e) { if (apagada || e.target.closest?.('#musica')) return; sonar().then((ok) => { if (ok) quitar(); }); }
+    pista.addEventListener('play', pintar); pista.addEventListener('pause', pintar);
+    if (!apagada) { gestos.forEach((g) => addEventListener(g, alGesto, true)); sonar().then((ok) => { if (ok) quitar(); }); }
+    pintar();
+    mb?.addEventListener('click', () => {
+      if (apagada || pista.paused) { apagada = false; try { localStorage.setItem('damian-musica', 'si'); } catch {} sonar(); }
+      else { apagada = true; try { localStorage.setItem('damian-musica', 'no'); } catch {} volumen(0, () => { pista.pause(); pintar(); }); pintar(); } });
     document.addEventListener('visibilitychange', () => { if (document.hidden && !pista.paused) pista.pause(); else if (!document.hidden && !apagada && mb?.getAttribute('aria-pressed') === 'true') pista.play().catch(() => {}); });
   })();
 
@@ -849,6 +877,18 @@ img.captura { filter: grayscale(1) contrast(1.05) !important; transition: filter
       [vista, tira].forEach((el) => { el.addEventListener('pointerenter', () => { pausa = true; marcar(); }); el.addEventListener('pointerleave', () => { pausa = false; reiniciar(); }); });
       if ('IntersectionObserver' in window) new IntersectionObserver((es) => { visible = es[0].isIntersecting; }, { threshold: .3 }).observe(vista); else visible = true;
       marcar(); reiniciar(); }); })();
+
+  // v13: franja que corre con el scroll; inclinación 3D con brillo en renders, láminas y en la foto de portada
+  (() => { if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const f = document.getElementById('franja');
+    if (f) { let y0 = 0, x = 0, vel = 0; const loop = () => { const y = scrollY; vel += (y - y0) * .08; y0 = y; vel *= .9; x -= .35 + Math.abs(vel) * .6;
+        const w = f.scrollWidth / 2; if (-x > w) x += w; f.style.transform = `translate3d(${x}px,0,0) skewX(${Math.max(-12, Math.min(12, -vel * .8))}deg)`; requestAnimationFrame(loop); }; loop(); }
+    if (!matchMedia('(pointer: fine)').matches) return;
+    document.querySelectorAll('.rv, .dl-l, .portada .render, .hoja').forEach((el) => { el.classList.add('inclina'); const g = document.createElement('span'); g.className = 'brilla'; el.append(g);
+      el.addEventListener('pointermove', (e) => { const r = el.getBoundingClientRect(), px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
+        el.style.transform = `perspective(900px) rotateX(${(.5 - py) * 7}deg) rotateY(${(px - .5) * 9}deg) translateZ(0)`; el.style.setProperty('--gx', px * 100 + '%'); el.style.setProperty('--gy', py * 100 + '%'); });
+      el.addEventListener('pointerleave', () => { el.style.transition = 'transform .6s cubic-bezier(.2, .8, .2, 1)'; el.style.transform = ''; setTimeout(() => el.style.transition = '', 600); });
+      el.addEventListener('pointerenter', () => { el.style.transition = 'transform .15s ease-out'; }); }); })();
   // visor a pantalla completa
   const visor = document.getElementById('visor'), vi = document.getElementById('visorImg'), vt = document.getElementById('visorTxt');
   let antes = null;
