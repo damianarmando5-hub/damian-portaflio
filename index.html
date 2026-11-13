@@ -629,6 +629,45 @@ h2 em .wi, h2 .acento .wi { animation: none !important; background-position: 30%
   .tab-musica.suena .eq2 i:nth-child(2) { animation-delay: -.3s; } .tab-musica.suena .eq2 i:nth-child(3) { animation-delay: -.6s; } .tab-musica.suena .eq2 i:nth-child(4) { animation-delay: -.15s; }
   .tab-musica.espera .eq2 { animation: llamaTab 1.6s ease-in-out infinite; } @keyframes llamaTab { 50% { opacity: .35; } }
 }
+
+/* ---------- v16: más herramientas y compatibilidad ---------- */
+.mx { padding-block: 40px 20px; }
+.mx-cab { max-width: 760px; margin-bottom: 40px; }
+.mx-cab h2, .compat h2 { font: 900 clamp(36px, 5vw, 64px)/1 var(--f-display); font-stretch: 112%; letter-spacing: -.01em; color: #f2f2f2; margin-top: 10px; }
+.mx-bloque { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr); gap: 44px; align-items: center; padding-block: 52px; border-top: 1px solid #1d1d1d; }
+.mx-bloque.inv { grid-template-columns: minmax(0, .75fr) minmax(0, 1.25fr); }
+.mx-bloque.inv .mx-media { order: 2; }
+.mx-media { position: relative; display: grid; gap: 14px; }
+.mx-media .flota { position: absolute; right: -18px; bottom: -26px; width: 52%; border-radius: 12px; overflow: hidden; box-shadow: 0 40px 70px -30px #000, 0 0 0 1px rgb(255 255 255 / .1); background: #fff; }
+.mx-media .flota img { display: block; width: 100%; }
+.mx-bloque h3 { font: 800 clamp(26px, 3vw, 40px)/1.05 var(--f-display); font-stretch: 108%; margin: 8px 0 14px; color: #f2f2f2; }
+.mx-bloque > div > p { color: #a9a9a9; font-size: 16px; }
+.mx-lista { list-style: none; padding: 0; margin: 18px 0 0; display: grid; gap: 10px; }
+.mx-lista li { display: grid; grid-template-columns: 22px 1fr; gap: 10px; color: #d6d6d6; font-size: 15px; }
+.mx-lista li::before { content: ""; width: 14px; height: 14px; margin-top: 4px; border-radius: 4px; border: 1px solid rgb(255 255 255 / .4); background: linear-gradient(135deg, rgb(255 255 255 / .25), transparent); }
+.mx-nota { margin-top: 14px; font: 500 12px/1.5 var(--f-mono); color: #7d7d7d; }
+.mx-num { display: flex; gap: 26px; margin-top: 20px; }
+.mx-num b { display: block; font: 900 clamp(30px, 3.4vw, 44px)/1 var(--f-display); color: #fff; }
+.mx-num span { font-size: 12.5px; color: #9a9a9a; }
+/* compatibilidad */
+.compat { padding-block: 80px 40px; }
+.compat-red { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-top: 34px; }
+.fmt { position: relative; padding: 20px 18px 18px; border-radius: 16px; background: #0d0d0d; border: 1px solid #1f1f1f; overflow: hidden; transition: border-color .3s, transform .4s cubic-bezier(.2, .8, .2, 1); }
+.fmt:hover { border-color: #3a3a3a; transform: translateY(-4px); }
+.fmt::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(300px circle at var(--mx, 50%) var(--my, 0%), rgb(255 255 255 / .07), transparent 60%); }
+.fmt .ext { display: inline-grid; place-items: center; min-width: 54px; height: 54px; padding: 0 10px; border-radius: 12px; font: 800 15px/1 var(--f-display); letter-spacing: .02em; color: #000; background: #ececec; }
+.fmt h4 { margin: 14px 0 6px; font: 700 17px/1.2 var(--f-display); color: #f2f2f2; }
+.fmt p { margin: 0; font-size: 13.5px; color: #9d9d9d; }
+.fmt .modo { display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; }
+.fmt .modo span { font: 500 10.5px/1 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; padding: 6px 8px; border-radius: 999px; border: 1px solid #333; color: #cfcfcf; }
+.fmt .modo span.no { color: #7a7a7a; border-style: dashed; }
+@media (max-width: 980px) { .mx-bloque, .mx-bloque.inv { grid-template-columns: minmax(0, 1fr); } .mx-bloque.inv .mx-media { order: 0; } .compat-red { grid-template-columns: repeat(2, minmax(0, 1fr)); } .mx-media .flota { right: 8px; bottom: -18px; width: 58%; } }
+@media (max-width: 420px) { .compat-red { grid-template-columns: minmax(0, 1fr); } }
+@media (prefers-reduced-motion: no-preference) { @supports (animation-timeline: view()) {
+  .fmt { animation: subeLigero linear both; animation-timeline: view(); animation-range: entry 0% cover 22%; }
+  .mx-media .flota { animation: flotaSube linear both; animation-timeline: view(); animation-range: entry 10% cover 60%; }
+  @keyframes flotaSube { from { translate: 0 60px; rotate: 3deg; } to { translate: 0 0; rotate: 0deg; } }
+} }
 </style>
 </head>
 <body>
@@ -661,7 +700,7 @@ h2 em .wi, h2 .acento .wi { animation: none !important; background-position: 30%
 <div class="aurora" aria-hidden="true"></div>
 <header class="barra-top" id="barraTop" aria-label="Navegación">
   <a class="logo" href="#inicio"><img src="img/favicon.png" alt="" width="30" height="30">DAMIAN</a>
-  <nav><a href="#caso">Caso de estudio</a><a href="#renders">Renders</a><a href="#damian-laminas">Láminas</a><a href="#laminas">Planos</a><a href="#modulos">Módulos</a></nav>
+  <nav><a href="#caso">Caso de estudio</a><a href="#renders">Renders</a><a href="#damian-laminas">Láminas</a><a href="#laminas">Planos</a><a href="#herramientas">Topografía</a><a href="#compatibilidad">Archivos</a><a href="#modulos">Módulos</a></nav>
   <a class="boton lleno" href="#caso">Ver el proyecto</a>
 </header>
 <section class="intro" id="intro" aria-label="DAMIAN: la D se arma con vigas y columnas doradas">
@@ -835,6 +874,79 @@ h2 em .wi, h2 .acento .wi { animation: none !important; background-position: 30%
   </div>
 </section>
 
+<section class="env mx" id="herramientas">
+  <div class="mx-cab"><p class="etq">Más allá del presupuesto</p><h2>Terreno, trámites e imagen, en la misma app</h2></div>
+
+  <div class="mx-bloque">
+    <div class="mx-media">
+      <div class="ventana"><div class="ventana-barra">Topografía y volúmenes · terreno en 3D</div><img src="img/topo-3d.webp" alt="Terreno en 3D con colores por elevación generado por DAMIAN Topografía" data-titulo="Topografía · terreno en 3D" loading="lazy" decoding="async"></div>
+      <figure class="flota" style="margin:0"><img src="img/topo-perfil.webp" alt="Perfil del terreno de A a B con longitud, cotas y pendiente" data-titulo="Topografía · perfil del terreno" loading="lazy" decoding="async"></figure>
+    </div>
+    <div>
+      <p class="etq">Topografía</p><h3>Curvas de nivel, perfiles y volúmenes</h3>
+      <p>Se importan los puntos del levantamiento y DAMIAN arma la superficie triangulada, dibuja las curvas de nivel y saca perfiles del terreno con un clic de A a B.</p>
+      <ul class="mx-lista">
+        <li>Curvas de nivel con intervalo y curva maestra a elegir</li>
+        <li>Perfil con estaciones, pendiente media, rasante y quiebres en cada triángulo</li>
+        <li>Corte y relleno exactos, secciones y cuadro de construcción con rumbos</li>
+        <li>Lee CSV, TXT, LandXML, KML/KMZ, GPX y puntos de DXF; sale a DXF y CSV</li>
+      </ul>
+      <p class="mx-nota">Las imágenes usan el terreno de ejemplo de la app (sintético, no es un levantamiento real).</p>
+    </div>
+  </div>
+
+  <div class="mx-bloque inv">
+    <div class="mx-media">
+      <div class="ventana"><div class="ventana-barra">Editor de documentos · Formatos oficiales</div><img src="img/formato-multiple.webp" alt="Formato Múltiple DGCDU-ADU-F-01 de San Luis Potosí llenándose sobre la hoja original, con la lista de requisitos del trámite" data-titulo="Formato Múltiple de San Luis Potosí" loading="lazy" decoding="async"></div>
+    </div>
+    <div>
+      <p class="etq">Trámites</p><h3>Formatos oficiales que se llenan en pantalla</h3>
+      <p>El <b>Formato Múltiple de San Luis Potosí</b> (DGCDU-ADU-F-01) se escribe directo sobre la hoja original; al marcar el trámite aparecen sus requisitos para irlos palomeando.</p>
+      <div class="mx-num"><div><b>139</b><span>formatos oficiales</span></div><div><b>129</b><span>de SEMARNAT</span></div><div><b>PDF</b><span>lleno, listo para imprimir</span></div></div>
+      <ul class="mx-lista">
+        <li>Municipal y federal: SLP, SEMARNAT, CONAGUA, INBA y CFE</li>
+        <li>Texto y marcas libres en cualquier parte de la hoja</li>
+        <li>Lo capturado se guarda y se puede reabrir y corregir</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="mx-bloque">
+    <div class="mx-media">
+      <div class="ventana"><div class="ventana-barra">DAMIAN Studio Pro · editor de imágenes</div><img src="img/studio-editor.webp" alt="Editor de imágenes DAMIAN Studio Pro con un render de la casa, presets, histograma y ajustes" data-titulo="DAMIAN Studio Pro · editor de imágenes" loading="lazy" decoding="async"></div>
+    </div>
+    <div>
+      <p class="etq">Imagen</p><h3>Editor de imágenes para renders y fotos de obra</h3>
+      <p>DAMIAN Studio Pro retoca renders y fotografías sin tocar el original: cada cambio se guarda como versión.</p>
+      <ul class="mx-lista">
+        <li>Luz, curvas, HSL, color grading, detalle e histograma con recortes</li>
+        <li>Presets (cálido, frío, cine, B/N) y los tuyos propios</li>
+        <li>Máscaras, pincel, texto, formas, cotas y antes / después</li>
+        <li>Borrar fondo, vectorizar a SVG o DXF y exportar por perfiles</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="env compat" id="compatibilidad">
+  <p class="etq">Compatibilidad</p><h2>Trabaja con los archivos que ya usas</h2>
+  <div class="compat-red">
+    <div class="fmt"><span class="ext">XLSX</span><h4>Excel</h4><p>Importa libros de presupuesto con conciliación y exporta con fórmulas vivas.</p><div class="modo"><span class="">Lee</span><span class="">Exporta</span></div></div>
+    <div class="fmt"><span class="ext">DXF</span><h4>AutoCAD DXF</h4><p>Lee planos por capas y exporta planta, cortes, curvas y perfiles.</p><div class="modo"><span class="">Lee</span><span class="">Exporta</span></div></div>
+    <div class="fmt"><span class="ext">DWG</span><h4>AutoCAD DWG</h4><p>Se abre a través del AutoCAD u ODA instalado en el equipo.</p><div class="modo"><span class="">Lee*</span></div></div>
+    <div class="fmt"><span class="ext">PDF</span><h4>PDF</h4><p>Juegos de planos, reportes y formatos llenos; también lee planos en PDF.</p><div class="modo"><span class="">Lee</span><span class="">Exporta</span></div></div>
+    <div class="fmt"><span class="ext">XML</span><h4>MS Project</h4><p>Programa de obra en XML de Project, en el orden del esquema MSPDI.</p><div class="modo"><span class="">Exporta</span><span class="no">.mpp no</span></div></div>
+    <div class="fmt"><span class="ext">IFC</span><h4>IFC / BIM</h4><p>Modelos IFC en el visor 3D y en el 4D de la obra.</p><div class="modo"><span class="">Lee</span></div></div>
+    <div class="fmt"><span class="ext">GLB</span><h4>3D: GLB · OBJ · STL</h4><p>El modelo del plano sale a 3D para render, impresión o Blender.</p><div class="modo"><span class="">Exporta</span><span class="">GLB lee</span></div></div>
+    <div class="fmt"><span class="ext">PPTX</span><h4>PowerPoint</h4><p>Láminas y presentaciones del editor de diseño.</p><div class="modo"><span class="">Exporta</span></div></div>
+    <div class="fmt"><span class="ext">DOCX</span><h4>Word</h4><p>Oficios, minutas y documentos del editor.</p><div class="modo"><span class="">Exporta</span></div></div>
+    <div class="fmt"><span class="ext">CSV</span><h4>CSV · TXT</h4><p>Puntos topográficos, catálogos y reportes; coma o punto decimal.</p><div class="modo"><span class="">Lee</span><span class="">Exporta</span></div></div>
+    <div class="fmt"><span class="ext">KML</span><h4>Google Earth · GPX</h4><p>KML/KMZ y GPX se convierten solos a coordenadas UTM.</p><div class="modo"><span class="">Lee</span></div></div>
+    <div class="fmt"><span class="ext">SVG</span><h4>Imágenes</h4><p>PNG, JPEG y WebP; vectoriza a SVG y DXF.</p><div class="modo"><span class="">Lee</span><span class="">Exporta</span></div></div>
+  </div>
+  <p class="mx-nota">* DWG requiere AutoCAD u ODA File Converter instalados; sin ellos, se pide el plano en DXF. Los archivos .mpp de Project no se leen.</p>
+</section>
+
   <section class="env modulos" id="modulos">
     <p class="etq">Cinco espacios, una sola app</p>
     <h2>Lo demás que trae DAMIAN</h2>
@@ -931,7 +1043,7 @@ h2 em .wi, h2 .acento .wi { animation: none !important; background-position: 30%
         c.textContent.split(/(\s+)/).forEach((w) => { if (!w.trim()) f.append(w); else { const s = document.createElement('span'); s.className = 'pal'; s.style.setProperty('--i', i++); s.textContent = w; f.append(s); } }); c.replaceWith(f); }
         else if (c.nodeType === 1 && c.tagName !== 'BR') partir(c); });
       partir(t); }
-    let pmE = null; document.addEventListener('pointermove', (ev) => { if (pmE) { pmE = ev; return; } pmE = ev; requestAnimationFrame(() => { const e = pmE; pmE = null; const el = e.target.closest?.('.ventana, .tarjeta'); if (!el) return; const r = el.getBoundingClientRect();
+    let pmE = null; document.addEventListener('pointermove', (ev) => { if (pmE) { pmE = ev; return; } pmE = ev; requestAnimationFrame(() => { const e = pmE; pmE = null; const el = e.target.closest?.('.ventana, .tarjeta, .fmt'); if (!el) return; const r = el.getBoundingClientRect();
       el.style.setProperty('--mx', (e.clientX - r.left) + 'px'); el.style.setProperty('--my', (e.clientY - r.top) + 'px'); }); }, { passive: true }); })();
 
   // v11: pantalla de carga, titulares con máscara, cursor, botones magnéticos y música
@@ -1038,7 +1150,7 @@ h2 em .wi, h2 .acento .wi { animation: none !important; background-position: 30%
   let antes = null;
   const cerrar = () => { visor.hidden = true; antes?.focus?.(); };
   document.addEventListener('click', (e) => {
-    const im = e.target.closest('.ventana img, .hoja, .tarjeta img, .render img, .cuadro, .dl-l, .rv');
+    const im = e.target.closest('.ventana img, .hoja, .tarjeta img, .render img, .cuadro, .dl-l, .rv, .flota img');
     if (!im) return;
     const img = im.tagName === 'IMG' ? im : im.querySelector('img');
     antes = document.activeElement; vi.src = img.src; vi.alt = img.alt; vt.textContent = img.dataset.titulo || img.alt; visor.hidden = false; document.getElementById('visorCerrar').focus();
